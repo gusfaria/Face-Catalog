@@ -61,3 +61,15 @@ input:focus::-webkit-input-placeholder {
 	background: red;
 	color: white;
 }
+
+#btn_send:hover{
+	background: red;
+	color: white;
+}
+
+
+#profiles_wrapper .picture img{
+	width: 100px;
+	height: 100px;
+	background: red;	
+}
