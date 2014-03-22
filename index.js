@@ -11,8 +11,23 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
+var imgArray = [];
 app.get("/", function(req, res){
 	res.render("index");
+  var path = 'loaded_imgs/';
+  console.log(path);
+  fs.readdir(path, function (err, files) {
+    if(err) throw err;
+    files.forEach(function(file) {
+      imgArray.push(path+file);
+      //DEBUG // console.log(path+file);
+      console.log('this is my array', imgArray);
+    });
+  });
+});
+
+app.get('/', function (req, res){
+  res.send('hello');
 });
 
 function parseDataURL(body) {
@@ -29,9 +44,12 @@ function parseDataURL(body) {
 app.post("/uploadImage", function(req, res, next){
 
     var data= parseDataURL(req.body.image);
-  	fs.writeFile("test.png", data.data, function(err) {
+    var random_id = "0000" + Math.floor(Math.random() * 10000);
+  	fs.writeFile("loaded_imgs/test"+ random_id +".png", data.data, function(err) {
   		console.log("error", err);
   	});
-
 });
+
+
+
 app.listen(8080);
