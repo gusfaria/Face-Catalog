@@ -1,8 +1,12 @@
 var express = require('express');
-var app  = express();
+var http = require('http');
 var fs = require('fs');
 
+var app = express();
+var server = app.listen(8080);
+var io = require('socket.io').listen(server);
 
+//configurations
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
@@ -11,23 +15,19 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
+
 var imgArray = [];
 app.get("/", function(req, res){
 	res.render("index");
   var path = 'loaded_imgs/';
-  console.log(path);
   fs.readdir(path, function (err, files) {
     if(err) throw err;
     files.forEach(function(file) {
       imgArray.push(path+file);
       //DEBUG // console.log(path+file);
-      console.log('this is my array', imgArray);
+      // console.log('this is my array', imgArray);
     });
   });
-});
-
-app.get('/', function (req, res){
-  res.send('hello');
 });
 
 function parseDataURL(body) {
@@ -50,6 +50,10 @@ app.post("/uploadImage", function(req, res, next){
   	});
 });
 
+io.sockets.on('connection', function (socket) {
+  socket.emit('filepaths', { imgPath: imgArray });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
-
-app.listen(8080);
