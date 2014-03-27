@@ -13,10 +13,13 @@
         <!-- //socket io -->
         <script src="/socket.io/socket.io.js"></script>
         <script>
-          var socket = io.connect('http://localhost');
-          socket.on('filepaths', function (data) {
-            console.log(data);
-            socket.emit('my other event', { img: 'data' });
+            var imgList = [];
+            var socket = io.connect('http://localhost');
+            socket.on('filepaths', function (data) {
+            // console.log(data.imgPath);
+            imgList.push(data.imgPath);
+            socket.emit('event', { img: 'data' });
+            myImages();
           });
         </script>
 
@@ -35,5 +38,22 @@
 			    	initApp(webcam, canvas);
 			    });
     	</script>
+        <div id='output'></div>
+        <script type="text/javascript">
+        //supposed to go into main
+        //not working
+        var myImages = function(){
+            console.log('hello  ', imgList[0][0]);
+            var output = document.getElementById('output');
+            for(var i=0; i < imgList[0].length; i++ ){
+                var imgcreate = document.createElement('img');
+                imgcreate.src = imgList[0][i];
+                output.appendChild(imgcreate);
+                console.log('this is my', imgList[0][i]);
+            }
+        };
+
+
+        </script>
     </body>
 </html>

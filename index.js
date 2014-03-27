@@ -23,9 +23,10 @@ app.get("/", function(req, res){
   fs.readdir(path, function (err, files) {
     if(err) throw err;
     files.forEach(function(file) {
-      imgArray.push(path+file);
-      //DEBUG // console.log(path+file);
-      // console.log('this is my array', imgArray);
+      var ext = file.substring(file.lastIndexOf('.')+1);
+      if(ext === 'png'){
+        imgArray.push(path+file);  
+      }    
     });
   });
 });
@@ -52,7 +53,7 @@ app.post("/uploadImage", function(req, res, next){
 
 io.sockets.on('connection', function (socket) {
   socket.emit('filepaths', { imgPath: imgArray });
-  socket.on('my other event', function (data) {
+  socket.on('event', function (data) {
     console.log(data);
   });
 });
