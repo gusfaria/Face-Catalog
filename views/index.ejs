@@ -15,7 +15,14 @@
     	<canvas id="canvas" width="640" height="480"></canvas>
     	<video id="webcam" width="640" height="480" style="display:none" ></video>
     	<a id="button" href="#">take picture</a>
-    	<script>
+    	
+        <div id='output'>
+            <% img.forEach(function (img) { %>
+            <img class="user_picture" src="<%= img %>">
+            <% }); %>
+        </div>
+        
+        <script>
 				var webcam = document.getElementById('webcam');
 				var canvas = document.getElementById('canvas');
 				$("#button").on("click", function(){
@@ -25,5 +32,6 @@
 			    	initApp(webcam, canvas);
 			    });
     	</script>
+        <script src="/public/js/faceAnalysis.js" ></script>    
     </body>
 </html>

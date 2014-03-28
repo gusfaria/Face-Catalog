@@ -12,21 +12,24 @@ app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
 var imgArray = [];
+
 app.get("/", function(req, res){
-	res.render("index");
   var path = 'public/loaded_imgs/';
-  console.log(path);
   fs.readdir(path, function (err, files) {
-    if(err) throw err;
+    if(err) {
+      console.log('error: '+err);
+      throw err;
+    }
     files.forEach(function(file) {
-      imgArray.push(path+file);
-      console.log('this is my array', imgArray);
+      var ext = file.substring(file.lastIndexOf('.')+1);
+      if(ext === 'png'){
+        imgArray.push(path+file);  
+      }
+    });
+    res.render('index',{
+      img: imgArray
     });
   });
-});
-
-app.get('/', function (req, res){
-  res.send('hello');
 });
 
 function parseDataURL(body) {
