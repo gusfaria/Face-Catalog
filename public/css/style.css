@@ -1,0 +1,75 @@
+body{
+	background: gray;	
+}
+
+#input{
+	margin: 250px 0;
+	width: 100%;
+	height: 100px;
+	text-align: center; 
+}
+
+.form{
+	margin:  0 auto;
+	background: transparent;
+	border: none;
+	font-size: 18px;
+	font-weight: lighter;
+	color: #eee;
+	font-family:'Helvetica', sans-serif;
+}
+
+input{
+	width: 500px;
+	height: 40px;
+}
+
+input:focus{
+	outline: none;
+	background: transparent;
+}
+
+input::-webkit-input-placeholder {
+	color: #eee;
+	font-weight: lighter;
+	border-bottom: 1px solid #2c3e50;
+	font-size: 18px;
+	font-family: 'Helvetica', sans-serif;
+}
+
+input:active::-webkit-input-placeholder ,
+input:focus::-webkit-input-placeholder {
+	color: #2c3e50;
+	font-weight: lighter;
+	font-size: 18px;
+	border-bottom: 1px solid #2c3e50;
+	font-family: 'Helvetica', sans-serif;
+}
+
+#btn_send{
+	width: 500px;
+	height: 30px;
+	background: darkgray;
+	display: block;
+	margin: 0 auto;
+	border: 0;
+	cursor: url(../img/hand.png), auto;
+	transition: all 0.5s;
+}
+
+#btn_send:hover{
+	background: red;
+	color: white;
+}
+
+#btn_send:hover{
+	background: red;
+	color: white;
+}
+
+
+#profiles_wrapper .picture img{
+	width: 100px;
+	height: 100px;
+	background: red;	
+}
