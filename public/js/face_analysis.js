@@ -1,7 +1,11 @@
 var faceAnalysis = function(){
 	var user_picture = document.querySelector('img');	
 	user_picture.style.border = "3px solid red";
-	console.log('user: ', user_picture);
+	console.log('user: ', user_picture.src);
+
+    // var test = document.getElementById('testImg');   
+    // test.style.border = "3px solid red";
+    // console.log('user: ', test.src);
 
     var uploadImageUrl = function(image_url, detection_flags){
     	if (image_url != null && image_url != '') {
@@ -32,6 +36,7 @@ var faceAnalysis = function(){
                 var string_response = $(xmlDoc).children("string_response").text();
                 if (int_response == 0) {
                     var image_uid = $(xmlDoc).children("img_uid").text();
+                    console.log(image_uid);
                     getImageInfo(image_uid);
                 }
                 else {
@@ -151,10 +156,13 @@ var faceAnalysis = function(){
                 	var value = tags[i].getElementsByTagName("value")[0].childNodes[0].nodeValue;
                 	var listitem = document.createElement('li');
                 	listitem.className = name;
-                	returned_tags.appendChild(listitem);
+
+                    // console.log(i+": "+name+" "+value+" "+confidence);
+                	
+                    returned_tags.appendChild(listitem);
                 	var listitemTxt = document.createTextNode( name+" "+value+" "+confidence);
 					listitem.appendChild(listitemTxt);
-					// console.log(i+": "+name+" "+value+" "+confidence);
+					
                 }
 	            getFaceImage(face_uid);                
             });
@@ -199,6 +207,6 @@ var faceAnalysis = function(){
         });
     };
 
-    uploadImageUrl(getUser, 'cropface,recognition,propoints,classifiers,extended');
+    uploadImageUrl(user_picture.src, 'cropface,recognition,propoints,classifiers,extended');
 
 };
