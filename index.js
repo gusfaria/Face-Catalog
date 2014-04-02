@@ -1,7 +1,15 @@
 var express = require('express');
 var app  = express();
+var http = require('http');
 var fs = require('fs');
+var connect = require('connect');
+var Spacebrew = require('./public/js/spacebrew.js').Spacebrew;
 
+var server = app.listen(8080);
+var io = require('socket.io').listen(server);
+
+var sb = new Spacebrew.Client();
+io.set('log level', 2);
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -30,6 +38,13 @@ app.get("/", function(req, res){
       img: imgArray
     });
   });
+
+  io.sockets.on('connection', function(socket) {
+    console.log('socket connected!');
+    connectedSocket = socket;
+    ConnectSpacebrew();
+  });
+
 });
 
 function parseDataURL(body) {
@@ -53,5 +68,26 @@ app.post("/uploadImage", function(req, res, next){
 });
 
 
+function onStringMessage(name, value) {
+  console.log("Receiving Spacebrew string message");
+  console.log("Value is ", value);
+  connectedSocket.emit('from spacebrew with love', value);
+  console.log('sent value via websockets to browser');
+};
 
-app.listen(8080);
+function ConnectSpacebrew() {
+  console.log('Connect Spacebrew!');
+  sb.name("Face catalog");
+  sb.description("This app ..."); // set the app description
+
+  // create the spacebrew subscription channels
+  sb.addPublish("coin", "boolean", "true");  // create the publication feed
+  sb.addSubscribe("coin", "boolean");    // create the subscription feed
+
+  sb.onStringMessage = onStringMessage;
+  sb.onOpen = function () { console.log("Spacebrew is open") };
+  sb.connect();  
+}; 
+
+
+

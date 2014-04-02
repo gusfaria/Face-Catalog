@@ -23,18 +23,37 @@
         <script src="/public/js/svmfilter_fft.js"></script>
         <script src="/public/js/mossefilter.js"></script>
         <script src="/public/js/ext_js/Stats.js"></script>
-
         <!-- clmtrackr js -->
 
+        <!-- spacebrew -->
+        <script type="text/javascript" src="js/sb-1.3.0.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script type="text/javascript">
+            console.log('start');
+            var isWorking = false;
+            var socket = io.connect(window.location.hostname);
+            socket.on('connect', function() {
+                console.log('connection created');
+            }); 
+
+            socket.on('from spacebrew with love', function(data) {
+                console.log('got spacebrew message: ', data);
+                data = isWorking;
+                console.log('is working',isWorking);
+            });
+
+        </script>
+
 		<script src="/public/js/application.js" ></script>
-        <script src="/public/js/face_analysis.js" ></script>
+        <script src="/public/js/face_analysis.js"></script>
     </head>
     <body>
     	<canvas id="canvas" width="640" height="480"></canvas>
     	<video id="webcam" width="640" height="480" style="display:none" ></video>
     	<a id="button" href="#">take picture</a>
     	<div id="testing">
-<!--             <img id="testImg" src="https://scontent-b-lga.xx.fbcdn.net/hphotos-ash4/t1/1379789_10151673101802204_1275284305_n.jpg"> -->
+            <img id="testImg" src="https://scontent-b-lga.xx.fbcdn.net/hphotos-ash4/t1/1379789_10151673101802204_1275284305_n.jpg">
             <div id="list"></div>
             <ol id="returned_tags"></ol>
         </div>
@@ -46,14 +65,14 @@
 
         
         <script>
-				var webcam = document.getElementById('webcam');
-				var canvas = document.getElementById('canvas');
-				$("#button").on("click", function(){
-					saveImageInCanvas(canvas);
-				});
-			    $(function(){
-			    	initApp(webcam, canvas);
-			    });
+    		var webcam = document.getElementById('webcam');
+    		var canvas = document.getElementById('canvas');
+    		$("#button").on("click", function(){
+    			saveImageInCanvas(canvas);
+    		});
+    	    $(function(){
+    	    	initApp(webcam, canvas);
+    	    });
     	</script>
     </body>
 </html>
