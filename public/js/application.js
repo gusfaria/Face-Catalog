@@ -10,9 +10,14 @@ function saveImageInCanvas(canvas){
     	data: JSON.stringify({image: img}),		
     	dataType: 'json',
     	success: function(response) {
-        	if(response.success) {
-            	window.location = response.data.link;
-        	}
+            console.log(response.BetafaceImageInfoResponse);
+            var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
+            var html='';
+            for(var att in tags){
+                console.log(att, tags[att]);
+                html+='<li>' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
+            }
+        	$("#output").html(html);    
     	}
 	});
 };
@@ -40,8 +45,7 @@ function initWebcam(webcam){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    trackingFace(canvasApp);
-
+	    //trackingFace(canvasApp);
 	  }
 	);
 };
