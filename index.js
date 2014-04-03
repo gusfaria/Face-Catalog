@@ -4,7 +4,8 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 var request = require('request');
 var parser = require('xml2json');
-
+var database = require(__dirname +"/database");
+console.log(database);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
@@ -14,7 +15,17 @@ app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
 var imgArray = [];
-
+database.init();
+app.get("/user/:uuid", function(req, res){
+  
+  database.getUser(req.params.uuid, function(err, data){
+    if(!err){
+      res.render('user', data);
+    }else{
+      res.end(err);
+    }
+  })
+});
 app.get("/", function(req, res){
   var path = 'public/loaded_imgs/';
   fs.readdir(path, function (err, files) {
@@ -46,8 +57,7 @@ function parseDataURL(body) {
   };
 }
 
-function getBetafaceapi(imageBase64, imageName, res){
-  console.log("ORIGINAL FILENAME", imageName);
+function getBetafaceapi(_uuid, imagePath, imageBase64, res){
   var api_key ="d45fd466-51e2-4701-8da8-04351c872236",
     api_secret =  "171e8465-f548-401d-b63b-caf0dc28df5f";
 
@@ -58,7 +68,7 @@ function getBetafaceapi(imageBase64, imageName, res){
       api_key:api_key,
       api_secret:api_secret,
       detection_flags: detectionFlags,
-      original_filename: "t" + imageName,
+      original_filename: "t" + _uuid,
       imagefile_data: imageBase64
     }
   };
@@ -80,14 +90,21 @@ function getBetafaceapi(imageBase64, imageName, res){
                 return getInfo();
               }else {
                 console.log("render metadata");
-                res.end(JSON.stringify(json));  
+                if(json.BetafaceImageInfoResponse.faces && json.BetafaceImageInfoResponse.faces.FaceInfo 
+                  && json.BetafaceImageInfoResponse.faces.FaceInfo.tags){
+                  betaface = json.BetafaceImageInfoResponse.faces.FaceInfo;
+                }
+                database.insert({"uuid":_uuid, "imagePath":imagePath, betaface:betaface}, function(result){
+                  res.end(JSON.stringify(json)); 
+                });
+                 
               }
               
             }else{
               res.end("error to obtain the information");
             }
         });
-    },500);
+    },1000);
   };
   request.post(params, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -95,20 +112,22 @@ function getBetafaceapi(imageBase64, imageName, res){
       param2.json.img_uid = json["BetafaceImageResponse"]["img_uid"];
       getInfo();
     }else{
-      res.end(body);
       console.log("ERROR", body);
+      res.end(body);
+      
     }
     
   });
-
 }
+
 app.post("/uploadImage", function(req, res, next){
     var data = parseDataURL(req.body.image);
-    var imageName  = uuid.v1() + ".png";
+    var _uuid = uuid.v1();
+    var imageName  = _uuid + ".png";
     var imagePath = "public/loaded_imgs/"+imageName;
-
+    
   	fs.writeFile(imagePath, data.data, function(err) {
-  		getBetafaceapi(data.data, imageName, res);
+  		getBetafaceapi(_uuid, imagePath, data.data, res);
   	});
 });
 
