@@ -1,7 +1,9 @@
 var express = require('express');
 var app  = express();
 var fs = require('fs');
-var SerialPort = require("serialport").SerialPort
+var uuid = require('node-uuid');
+var request = require('request');
+var parser = require('xml2json');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -39,35 +41,75 @@ function parseDataURL(body) {
 
   return {
     contentType: match[1],
+    base64:match[2],
     data: new Buffer(match[2], 'base64')
   };
 }
 
-app.post("/uploadImage", function(req, res, next){
+function getBetafaceapi(imageBase64, imageName, res){
+  console.log("ORIGINAL FILENAME", imageName);
+  var api_key ="d45fd466-51e2-4701-8da8-04351c872236",
+    api_secret =  "171e8465-f548-401d-b63b-caf0dc28df5f";
 
-    var data= parseDataURL(req.body.image);
-    var random_id = "0000" + Math.floor(Math.random() * 10000);
-  	fs.writeFile("public/loaded_imgs/test"+ random_id +".png", data.data, function(err) {
-  		console.log("error", err);
+  var detectionFlags = 'cropface,recognition,propoints,classifiers,extended';
+  var params = {
+    url: 'http://www.betafaceapi.com/service.svc/UploadNewImage_File',
+    json : {
+      api_key:api_key,
+      api_secret:api_secret,
+      detection_flags: detectionFlags,
+      original_filename: "t" + imageName,
+      imagefile_data: imageBase64
+    }
+  };
+  
+  var param2 = {
+    url:"http://www.betafaceapi.com/service.svc/GetImageInfo",
+    headers: {'Content-Type': 'application/json'},
+    json:{api_key:api_key, api_secret:api_secret}
+  }
+
+  var getInfo = function(){
+    setTimeout(function() {
+      request.post(param2, function(_error, _response, _body){
+            if (!_error && _response.statusCode == 200) {
+              var json = parser.toJson(_body, {object:true});
+              console.log(json.BetafaceImageInfoResponse.int_response);
+              if(json.BetafaceImageInfoResponse.int_response === 1){
+                console.log("Image in queue");
+                return getInfo();
+              }else {
+                console.log("render metadata");
+                res.end(JSON.stringify(json));  
+              }
+              
+            }else{
+              res.end("error to obtain the information");
+            }
+        });
+    },500);
+  };
+  request.post(params, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var json = parser.toJson(body, {object: true});
+      param2.json.img_uid = json["BetafaceImageResponse"]["img_uid"];
+      getInfo();
+    }else{
+      res.end(body);
+      console.log("ERROR", body);
+    }
+    
+  });
+
+}
+app.post("/uploadImage", function(req, res, next){
+    var data = parseDataURL(req.body.image);
+    var imageName  = uuid.v1() + ".png";
+    var imagePath = "public/loaded_imgs/"+imageName;
+
+  	fs.writeFile(imagePath, data.data, function(err) {
+  		getBetafaceapi(data.data, imageName, res);
   	});
 });
-
-//serial port
-var serialPort = new SerialPort("/dev/tty.usbmodemfa131", {
-  baudrate: 9600
-}, false); // this is the openImmediately flag [default is true]
-
-serialPort.open(function () {
-  console.log('open');
-  serialPort.on('data', function(data) {
-    console.log('data received: ' + data);
-  });
-  serialPort.write("ls\n", function(err, results) {
-    console.log('err ' + err);
-    console.log('results ' + results);
-  });
-});
-
-
 
 app.listen(8080);

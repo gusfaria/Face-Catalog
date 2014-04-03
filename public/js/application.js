@@ -1,5 +1,8 @@
 var canvasApp, webcamApp; 
 var ctracker;
+var videoSelect = document.querySelector("select#videoSource");
+navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+var sourceVideo;
 function saveImageInCanvas(canvas){
 	var img = canvas.toDataURL();
 
@@ -10,9 +13,14 @@ function saveImageInCanvas(canvas){
     	data: JSON.stringify({image: img}),		
     	dataType: 'json',
     	success: function(response) {
-        	if(response.success) {
-            	window.location = response.data.link;
-        	}
+            console.log(response.BetafaceImageInfoResponse);
+            var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
+            var html='';
+            for(var att in tags){
+                console.log(att, tags[att]);
+                html+='<li>' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
+            }
+        	$("#output").html(html);    
     	}
 	});
 };
@@ -35,22 +43,36 @@ function applicationLoop(){
 	window.requestAnimFrame(applicationLoop);
 }
 
-function initWebcam(webcam){
-	navigator.webkitGetUserMedia({video:true, audio:false},
+function initWebcam(sourceInfo){
+	navigator.webkitGetUserMedia({video:{optional:[{sourceId: sourceInfo.id}]}, audio:false},
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    trackingFace(canvasApp);
-
+	    //trackingFace(canvasApp);
 	  }
 	);
 };
+
+	
+function gotSources(sourceInfos) {
+  for (var i = sourceInfos.length; i--;) {
+    var sourceInfo = sourceInfos[i];
+    console.log(sourceInfo);
+    if (sourceInfo.kind === 'video') {
+      initWebcam(sourceInfo);
+      return;
+    }
+  }
+}
 
 function initApp(webcam, canvas){
 	
 	canvasApp = canvas;
 	webcamApp = webcam;
-	initWebcam(webcam);
-	applicationLoop();
-	
+	if (typeof MediaStreamTrack === 'undefined'){
+	  alert('This browser does not support MediaStreamTrack.\n\nTry Chrome Canary.');
+	} else {
+	  MediaStreamTrack.getSources(gotSources);
+	}
+	applicationLoop();	
 }
