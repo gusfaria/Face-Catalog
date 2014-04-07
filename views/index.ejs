@@ -23,34 +23,28 @@
         <script src="/public/js/svmfilter_fft.js"></script>
         <script src="/public/js/mossefilter.js"></script>
         <script src="/public/js/ext_js/Stats.js"></script>
-
         <!-- clmtrackr js -->
 
 		<script src="/public/js/application.js" ></script>
-        <script src="/public/js/face_analysis.js" ></script>
     </head>
     <body>
     	<canvas id="canvas" width="640" height="480"></canvas>
     	<video id="webcam" width="640" height="480" style="display:none" ></video>
-    	<a id="button" href="#">take picture</a>
-    	<div id="testing">
-<!--             <img id="testImg" src="https://scontent-b-lga.xx.fbcdn.net/hphotos-ash4/t1/1379789_10151673101802204_1275284305_n.jpg"> -->
-            <div id="list"></div>
-            <ol id="returned_tags"></ol>
-        </div>
+        <input type="text" name="name" placeholder="First and last name">
+        <a id="button" href="#">Ok!</a>
         <ul id="output">
         </ul>
 
         
         <script>
-				var webcam = document.getElementById('webcam');
-				var canvas = document.getElementById('canvas');
-				$("#button").on("click", function(){
-					saveImageInCanvas(canvas);
-				});
-			    $(function(){
-			    	initApp(webcam, canvas);
-			    });
+			var webcam = document.getElementById('webcam');
+			var canvas = document.getElementById('canvas');
+			$("#button").on("click", function(){
+				saveImageInCanvas(canvas);
+			});
+		    $(function(){
+		    	initApp(webcam, canvas);
+		    });
     	</script>
     </body>
 </html>

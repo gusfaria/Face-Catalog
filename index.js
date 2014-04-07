@@ -2,10 +2,12 @@ var express = require('express');
 var app  = express();
 var fs = require('fs');
 var uuid = require('node-uuid');
+// var SerialPort = require("serialport").SerialPort;
 var request = require('request');
 var parser = require('xml2json');
 var database = require(__dirname +"/database");
-console.log(database);
+// console.log(database);
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
@@ -114,9 +116,7 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
     }else{
       console.log("ERROR", body);
       res.end(body);
-      
     }
-    
   });
 }
 
@@ -130,5 +130,21 @@ app.post("/uploadImage", function(req, res, next){
   		getBetafaceapi(_uuid, imagePath, data.data, res);
   	});
 });
+
+//serial port
+// var serialPort = new SerialPort("/dev/tty.usbmodemfd121", {
+//   baudrate: 9600
+// }, false); 
+
+// serialPort.open(function () {
+//   console.log('open');
+//   serialPort.on('data', function(data) {
+//     console.log('data received: ' + data);
+//   });
+//   serialPort.write("ls\n", function(err, results) {
+//     console.log('err ' + err);
+//     console.log('results ' + results);
+//   });
+// });
 
 app.listen(8080);

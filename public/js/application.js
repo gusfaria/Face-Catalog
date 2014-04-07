@@ -57,7 +57,7 @@ function initWebcam(sourceInfo){
 function gotSources(sourceInfos) {
   for (var i = sourceInfos.length; i--;) {
     var sourceInfo = sourceInfos[i];
-    console.log(sourceInfo);
+    // console.log(sourceInfo);
     if (sourceInfo.kind === 'video') {
       initWebcam(sourceInfo);
       return;
