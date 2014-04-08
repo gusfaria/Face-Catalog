@@ -5,7 +5,7 @@ var uuid = require('node-uuid');
 var request = require('request');
 var parser = require('xml2json');
 var database = require(__dirname +"/database");
-console.log(database);
+console.log('db', database);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
@@ -14,18 +14,29 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
+var name = "";
 var imgArray = [];
 database.init();
 app.get("/user/:uuid", function(req, res){
-  
   database.getUser(req.params.uuid, function(err, data){
     if(!err){
       res.render('user', data);
     }else{
       res.end(err);
     }
-  })
+  });
 });
+// app.get("/all_users", function(req, res){
+//   database.getUser(req.params.uuid, function(err, data){
+//     if(!err){
+//       console.log('db', database);
+//       res.render('all_users', data);
+//     }else{
+//       res.end(err);
+//     }
+//   });
+// });
+
 app.get("/", function(req, res){
   var path = 'public/loaded_imgs/';
   fs.readdir(path, function (err, files) {
@@ -44,6 +55,7 @@ app.get("/", function(req, res){
     });
   });
 });
+
 
 function parseDataURL(body) {
   var match = /data:([^;]+);base64,(.*)/.exec(body);
@@ -97,7 +109,6 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
                 database.insert({"uuid":_uuid, "imagePath":imagePath, betaface:betaface}, function(result){
                   res.end(JSON.stringify(json)); 
                 });
-                 
               }
               
             }else{
@@ -113,10 +124,8 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
       getInfo();
     }else{
       console.log("ERROR", body);
-      res.end(body);
-      
+      res.end(body); 
     }
-    
   });
 }
 
@@ -130,5 +139,4 @@ app.post("/uploadImage", function(req, res, next){
   		getBetafaceapi(_uuid, imagePath, data.data, res);
   	});
 });
-
 app.listen(8080);

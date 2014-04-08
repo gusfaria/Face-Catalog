@@ -3,14 +3,16 @@ var ctracker;
 var videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 var sourceVideo;
-function saveImageInCanvas(canvas){
+
+function saveImageInCanvas(canvas, name){
+	console.log('my name: ', name);
 	var img = canvas.toDataURL();
 
 	$.ajax({
     	url: 'http://localhost:8080/uploadImage',
     	type: 'post',
     	contentType: 'application/json',
-    	data: JSON.stringify({image: img}),		
+    	data: JSON.stringify({image: img, name: name}),		
     	dataType: 'json',
     	success: function(response) {
             console.log(response.BetafaceImageInfoResponse);
@@ -18,9 +20,11 @@ function saveImageInCanvas(canvas){
             var html='';
             for(var att in tags){
                 console.log(att, tags[att]);
-                html+='<li>' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
+                html+='<li class="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
             }
-        	$("#output").html(html);    
+        	$("#output").html(html);
+        	$("#output").append('<h2>' + user_name.value + '</h2>');
+        	// $("#output").append('<h3>' + uuid + '</h2>');    
     	}
 	});
 };
@@ -57,7 +61,7 @@ function initWebcam(sourceInfo){
 function gotSources(sourceInfos) {
   for (var i = sourceInfos.length; i--;) {
     var sourceInfo = sourceInfos[i];
-    console.log(sourceInfo);
+    console.log('camera source info: ', sourceInfo);
     if (sourceInfo.kind === 'video') {
       initWebcam(sourceInfo);
       return;
@@ -75,4 +79,4 @@ function initApp(webcam, canvas){
 	  MediaStreamTrack.getSources(gotSources);
 	}
 	applicationLoop();	
-}
+};

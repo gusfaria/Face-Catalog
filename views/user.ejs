@@ -5,17 +5,20 @@
     <head>
         <meta charset="utf-8" />
         <script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        
     </head>
     <body>
     	<div id="testing">
          <div id="list"></div>
-            <ol id="returned_tags"><%= betaface.tags.TagInfo[0].value %> - <%= betaface.tags.TagInfo[0].name %></ol>
+            <ol id="returned_tags">
+                <% for(var i=0; i< betaface.tags.TagInfo.length; i++) {%>
+                <li><%= betaface.tags.TagInfo[i].value %> - <%= betaface.tags.TagInfo[i].name %></li>
+                <% } %>
+            </ol>
+            
         </div>
-        <ul id="output"> <img src="/<%=imagePath%>" /> 
-        </ul>
-
-        
-       
+        <div id="output"> 
+            <img src="/<%= imagePath %>" />
+            <p><%= uuid %></p>
+        </div>
     </body>
 </html>
