@@ -3,11 +3,10 @@ var ctracker;
 var videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 var sourceVideo;
-
+var foo = "";
+var name = "this is a name!";
 function saveImageInCanvas(canvas, name){
-	console.log('my name: ', name);
 	var img = canvas.toDataURL();
-
 	$.ajax({
     	url: 'http://localhost:8080/uploadImage',
     	type: 'post',
@@ -15,19 +14,35 @@ function saveImageInCanvas(canvas, name){
     	data: JSON.stringify({image: img, name: name}),		
     	dataType: 'json',
     	success: function(response) {
-            console.log(response.BetafaceImageInfoResponse);
             var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
             var html='';
             for(var att in tags){
-                console.log(att, tags[att]);
+                // console.log(att, tags[att]);
                 html+='<li class="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
             }
         	$("#output").html(html);
-        	$("#output").append('<h2>' + user_name.value + '</h2>');
-        	// $("#output").append('<h3>' + uuid + '</h2>');    
+
+        	foo = Math.round(tags[0].value);
+			
+			if(foo < 25){
+				$('p#fortune_msg').text('Now that you are '+ foo +' old, everything will now come your way.');
+			} else if(foo > 25 && foo < 30)	{
+				$('p#fortune_msg').text('I can see you will live long. You\'re still '+ foo +'.');
+			} else if(foo >= 30 && foo < 40){
+				$('p#fortune_msg').text('You are on your 30s Bro.' + foo );
+			} else if(foo >= 40){
+				$('p#fortune_msg').text('You are '+ foo +'now is the time to try something new.');
+			} else {
+				$('p#fortune_msg').text('NO DATA BRO. ');
+			}
+			
+			$('#fortune').css('display','flex');
+
     	}
-	});
+	});	
 };
+
+
 
 function renderCanvas(webcam, canvas){
 	var ctx = canvas.getContext('2d');
@@ -70,7 +85,6 @@ function gotSources(sourceInfos) {
 }
 
 function initApp(webcam, canvas){
-	
 	canvasApp = canvas;
 	webcamApp = webcam;
 	if (typeof MediaStreamTrack === 'undefined'){

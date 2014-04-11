@@ -14,28 +14,26 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
-var name = "";
 var imgArray = [];
+var whatever = "NOT YET";
 database.init();
 app.get("/user/:uuid", function(req, res){
   database.getUser(req.params.uuid, function(err, data){
     if(!err){
+
       res.render('user', data);
+
     }else{
       res.end(err);
     }
   });
 });
-// app.get("/all_users", function(req, res){
-//   database.getUser(req.params.uuid, function(err, data){
-//     if(!err){
-//       console.log('db', database);
-//       res.render('all_users', data);
-//     }else{
-//       res.end(err);
-//     }
-//   });
-// });
+
+
+app.get("/all_users", function(req, res){
+    res.render('all_users', { whatever : whatever });
+});
+
 
 app.get("/", function(req, res){
   var path = 'public/loaded_imgs/';
@@ -51,7 +49,8 @@ app.get("/", function(req, res){
       }
     });
     res.render('index',{
-      img: imgArray
+      img: imgArray,
+      whatever : whatever
     });
   });
 });
@@ -98,9 +97,11 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
               var json = parser.toJson(_body, {object:true});
               console.log(json.BetafaceImageInfoResponse.int_response);
               if(json.BetafaceImageInfoResponse.int_response === 1){
+                whatever = "LOADING";
                 console.log("Image in queue");
                 return getInfo();
               }else {
+                whatever = "SENT";
                 console.log("render metadata");
                 if(json.BetafaceImageInfoResponse.faces && json.BetafaceImageInfoResponse.faces.FaceInfo 
                   && json.BetafaceImageInfoResponse.faces.FaceInfo.tags){

@@ -33,47 +33,109 @@
             padding: 0;
         }
 
-/*        div#curtains{
-            background: black;
+        body{
+            background: black; 
+        }
+
+        div#container{
+            background: black; 
             width: 100%;
             height: 100%;
             position: absolute;
             top:0;
-        }*/
+            margin: 0 auto;
+            text-align: center;
+        }
+        div#psychic_gif{
+            background: url('public/img/psychic.gif') 500px no-repeat; 
+            background-size: 800px;
+            background-position: center;
+            height: 500px;
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        div#debug{
+            position: absolute;
+            top: 0;
+            display: none;
+            z-index: 111;
+        }
 
         a#button{
-            padding: 10px 285px;
             text-align: center;
-            width: 640px;
+            width: 500px;
             height: 30px;
             background: lightblue;
+            position: relative;
+            margin-top: -100px;
         }
-        input#user_name{
+
+        /* input#user_name{
             width:640px;
             height: 20px;
             margin-bottom: 10px;
+        }*/
+
+        ul li{
+            background: white;
         }
+
+        div#fortune{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background: gray;
+            z-index: 105; 
+            display: none;
+            transition: ALL 3s;
+        }
+
+        p#fortune_msg{
+            padding: 0 10%;
+            font-family: 'helvetica', san-serif;
+            font-size: 130px;
+        }
+
         </style>
 
     </head>
     <body>
-    	<div id="curtains">
-        <canvas id="canvas" width="640" height="480"></canvas>
-    	<video id="webcam" width="640" height="480" style="display:none" ></video>
-        <input id="user_name" type="text" name="name" placeholder="First and Last name" style="display:block">
-        <ul id="output"></ul>
-        <a id="button" href="#">take picture</a>
-        
-        <p id="loading"></p>
+        <div id="container">
+            <div id="psychic_gif"></div>
+            <a id="button" href="#">take picture</a>
+        </div>
+
+        <div id='debug'>
+            <canvas id="canvas" width="640" height="480"></canvas>
+            <video id="webcam" width="640" height="480" style="display:none" ></video>
+        <!-- <input id="user_name" type="text" name="name" placeholder="First and Last name" style="display:block"> -->
+            <ul id="output">
+                //data is going here! 
+            </ul>
+        </div>
+        <div id="fortune">
+            <p id="fortune_msg"></p>
         </div>
 
         <script>
 			var webcam = document.getElementById('webcam');
 			var canvas = document.getElementById('canvas');
             $("#button").on("click", function(){
-				saveImageInCanvas(canvas, $('#user_name').val());
+                saveImageInCanvas(canvas, $('#user_name').val());
                 // window.open("/user/ffa57d40-bf3e-11e3-968a-f77353cd20c5");
-			});
+			
+            });
+
+            $(document).keydown(function(e){
+            if (e.keyCode==68)
+                $("#debug").toggle();
+            });
+
 		    $(function(){
 		    	initApp(webcam, canvas);
 		    });
