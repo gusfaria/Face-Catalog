@@ -1,5 +1,6 @@
 var express = require('express');
 var app  = express();
+var port = 8080;
 var fs = require('fs');
 var uuid = require('node-uuid');
 var request = require('request');
@@ -14,8 +15,6 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use('/public', express.static(__dirname + '/public'));
 
-var imgArray = [];
-var whatever = "NOT YET";
 database.init();
 app.get("/user/:uuid", function(req, res){
   database.getUser(req.params.uuid, function(err, data){
@@ -29,9 +28,8 @@ app.get("/user/:uuid", function(req, res){
   });
 });
 
-
-app.get("/all_users", function(req, res){
-    res.render('all_users', { whatever : whatever });
+app.get("/all_users", function(req, res){    
+    res.render('all_users', "");
 });
 
 
@@ -42,19 +40,9 @@ app.get("/", function(req, res){
       console.log('error: '+err);
       throw err;
     }
-    files.forEach(function(file) {
-      var ext = file.substring(file.lastIndexOf('.')+1);
-      if(ext === 'png'){
-        imgArray.push(path+file);  
-      }
-    });
-    res.render('index',{
-      img: imgArray,
-      whatever : whatever
-    });
+    res.render('index', "");
   });
 });
-
 
 function parseDataURL(body) {
   var match = /data:([^;]+);base64,(.*)/.exec(body);
@@ -97,11 +85,9 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
               var json = parser.toJson(_body, {object:true});
               console.log(json.BetafaceImageInfoResponse.int_response);
               if(json.BetafaceImageInfoResponse.int_response === 1){
-                whatever = "LOADING";
                 console.log("Image in queue");
                 return getInfo();
               }else {
-                whatever = "SENT";
                 console.log("render metadata");
                 if(json.BetafaceImageInfoResponse.faces && json.BetafaceImageInfoResponse.faces.FaceInfo 
                   && json.BetafaceImageInfoResponse.faces.FaceInfo.tags){
@@ -140,4 +126,5 @@ app.post("/uploadImage", function(req, res, next){
   		getBetafaceapi(_uuid, imagePath, data.data, res);
   	});
 });
-app.listen(8080);
+app.listen(port);
+console.log("Express server listening on port "+port);
