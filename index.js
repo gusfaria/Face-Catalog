@@ -6,6 +6,7 @@ var uuid = require('node-uuid');
 var request = require('request');
 var parser = require('xml2json');
 var database = require(__dirname +"/database");
+
 console.log('db', database);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -19,9 +20,7 @@ database.init();
 app.get("/user/:uuid", function(req, res){
   database.getUser(req.params.uuid, function(err, data){
     if(!err){
-
       res.render('user', data);
-
     }else{
       res.end(err);
     }
@@ -31,7 +30,6 @@ app.get("/user/:uuid", function(req, res){
 app.get("/all_users", function(req, res){    
     res.render('all_users', "");
 });
-
 
 app.get("/", function(req, res){
   var path = 'public/loaded_imgs/';
