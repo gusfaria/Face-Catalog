@@ -3,12 +3,54 @@
 
 <html lang="en">
     <head>
+        <title>All users</title>
         <meta charset="utf-8" />
         <script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript" src="public/js/spacebrew.js"></script>
+        <script type="text/javascript">
+          
+            // when window loads call the setup method
+            $(window).on("load", setup);
+
+            // Spacebrew Object
+            var sb,
+                app_name = "test";
+
+            /**
+            * setup Function that connect to spacebrew and creates a listener for clicks of the submit button.
+            */
+            function setup (){
+                app_name = app_name;
+
+                // setup spacebrew
+                sb = new Spacebrew.Client();  // create spacebrew client object
+
+                sb.name(app_name);
+                sb.description("This app sends text from an HTML form."); // set the app description
+
+                // create the spacebrew subscription channels
+                sb.addPublish("text", "string", "");    // create the publication feed
+                sb.addSubscribe("text", "string");      // create the subscription feed
+
+                // configure the publication and subscription feeds
+                sb.onStringMessage = onStringMessage;
+
+                // sb.onOpen = onOpen;
+
+                // connect to spacbrew
+                sb.connect();  
+
+            }
+            
+            var onStringMessage = function( name, value ){
+                console.log("[onBooleanMessage] boolean message received ", value);
+                $("#name").text("Hi " + value); // display the sent message in the browser         
+            };
+
+        </script>
     </head>
     <body>
-        
+        <h1 id="name"></h1>
         <a href="/">CLICK HERE</a>
-
     </body>
 </html>

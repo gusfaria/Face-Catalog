@@ -66,7 +66,17 @@ div#fortune{
     transition: ALL 3s;
 }
 
+h1#name{
+    position: absolute;
+    background: lime;
+    width: 100%;
+    font-size: 20px;
+    font-family: Helvetica;
+    text-align: center;
+}
+
 p#fortune_msg{
+	position: absolute;
     padding: 0 10%;
     font-family: 'helvetica', san-serif;
     font-size: 130px;

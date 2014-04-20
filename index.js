@@ -124,5 +124,6 @@ app.post("/uploadImage", function(req, res, next){
   		getBetafaceapi(_uuid, imagePath, data.data, res);
   	});
 });
+
 app.listen(port);
 console.log("Express server listening on port "+port);

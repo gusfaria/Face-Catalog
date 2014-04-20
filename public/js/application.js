@@ -3,8 +3,7 @@ var ctracker;
 var videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 var sourceVideo;
-var foo = "";
-var name = "this is a name!";
+
 function saveImageInCanvas(canvas, name){
 	var img = canvas.toDataURL();
 	$.ajax({
@@ -42,8 +41,6 @@ function saveImageInCanvas(canvas, name){
 	});	
 };
 
-
-
 function renderCanvas(webcam, canvas){
 	var ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, webcam.width, webcam.height);
@@ -67,7 +64,7 @@ function initWebcam(sourceInfo){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    //trackingFace(canvasApp);
+	    trackingFace(canvasApp);
 	  }
 	);
 };
@@ -83,6 +80,35 @@ function gotSources(sourceInfos) {
     }
   }
 }
+
+//SPACEBREW STARTS
+var sb,
+	app_name = "psychic";
+	
+	$(window).on("load", setup);
+
+var setup = function(){
+    app_name = app_name;
+
+    sb = new Spacebrew.Client();  // create spacebrew client object
+
+    sb.name(app_name);
+    sb.description("This app sends text from an HTML form."); // set the app description
+
+    sb.addPublish("text", "string", "");    // create the publication feed
+    sb.addSubscribe("text", "string");      // create the subscription feed
+
+    sb.onStringMessage = onStringMessage;     
+    sb.connect();  
+};
+
+
+var onStringMessage = function( name, value ){
+    console.log("[onBooleanMessage] boolean message received ", value);
+    $("#name").text("Hi " + value); // display the sent message in the browser 
+   	state1();        
+};
+//SPACEBREW ENDS
 
 function initApp(webcam, canvas){
 	canvasApp = canvas;
