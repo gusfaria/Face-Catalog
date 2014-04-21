@@ -21,6 +21,7 @@ function saveImageInCanvas(canvas, name){
             }
         	$("#output").html(html);
 
+        var make_fortune = function(){
         	foo = Math.round(tags[0].value);
 			
 			if(foo < 25){
@@ -36,6 +37,9 @@ function saveImageInCanvas(canvas, name){
 			}
 			
 			$('#fortune').css('display','flex');
+        };
+
+        make_fortune();
 
     	}
 	});	
@@ -51,24 +55,23 @@ function renderCanvas(webcam, canvas){
 function trackingFace(canvas){
 	ctracker = new clm.tracker({stopOnConvergence : true});
 	ctracker.init(pModel);
-	ctracker.start(canvas, [0, 0, canvas.width, canvas.height]);
+	ctracker.start(webcam, [0, 0, canvas.width, canvas.height]);
 }
 
 function applicationLoop(){
 	renderCanvas(webcamApp, canvasApp);
 	window.requestAnimFrame(applicationLoop);
-}
+};
 
 function initWebcam(sourceInfo){
 	navigator.webkitGetUserMedia({video:{optional:[{sourceId: sourceInfo.id}]}, audio:false},
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    trackingFace(canvasApp);
+	    // trackingFace(canvasApp);
 	  }
 	);
 };
-
 	
 function gotSources(sourceInfos) {
   for (var i = sourceInfos.length; i--;) {
