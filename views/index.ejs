@@ -28,56 +28,64 @@
 
         <script type="text/javascript" src="public/js/spacebrew.js"></script> //spacebrew
         <script src="/public/js/application.js"></script>
-
     </head>
     <body>
         <div id="container">
-            <div id="psychic_gif"></div>
-<!--             <a id="button" href="#">take picture</a> -->
+            <section id="slide1" class="slide">
+                <div id="psychic_gif"></div>
+            </section>
+            <section id="slide2" class="slide">
+
+            </section>
         </div>
 
         <div id='debug'>
             <canvas id="canvas" width="640" height="480"></canvas>
+<!--             <video id="webcam" width="640" height="480"></video> -->
             <video id="webcam" width="640" height="480" style="display:none" ></video>
+            
             <audio id="audio_welcome" src="/public/res/welcome.wav" type="audio/wav"></audio>
-        <!-- <input id="user_name" type="text" name="name" placeholder="First and Last name" style="display:block"> -->
             <ul id="output">
 <!--                 //data is going here!  -->
             </ul>
         </div>
-        <div id="fortune">
-            <p id="name"></p>
-            <p id="fortune_msg"></p>
-        </div>
-        
         <script>
+            //SPACEBREW
             $(window).on("load", setup);
 
 			var webcam = document.getElementById('webcam');
 			var canvas = document.getElementById('canvas');
 
+            // spacebar and sending name from user app triggers that!
             var state1 = function(){
-                saveImageInCanvas(canvas, $('#user_name').val());     
-                // window.open("/user/ffa57d40-bf3e-11e3-968a-f77353cd20c5");
-                $('#psychic_gif').css({
-                    "background":"url(public/img/psychic.gif)",
-                    "background-size" : "800px",
-                    "background-repeat" : "no-repeat"
-                });
-                var welcome_audio = document.getElementById('audio_welcome');
-                welcome_audio.play();
+                    
+                //slide2 
+                setTimeout(function(){
+                    $('#slide2').css({
+                        "zIndex" : 101,
+                        "opacity" : 1
+                    });
+                    state2();
+                },2000);
             };
 
-            // $("#button").on("click", function(){
-            //     state1();
-            // });
+            var state2 = function(){ // PSYCHIC APPEARS...
+                var welcome_audio = document.getElementById('audio_welcome');
+                welcome_audio.play();
+                saveImageInCanvas(canvas);    
+            };
 
             $(document).keydown(function(e){
-                if (e.keyCode==68){
+                if (e.keyCode === 68){ //PRESS D
                     $("#debug").toggle();
                 } 
-                if(e.keyCode == 32){
-                    state1();
+                if(e.keyCode === 32){ // PRESS SPACEBAR // this is activate when the installation detects the user
+                    sb.send("state", "string", "START IPAD");
+                    state1(); //selfie
+                }
+                if(e.keyCode === 81 ){ // PRESS Q //STARTS USER APPLICATION!
+                    var newString = "START IPAD";
+                    sb.send("state", "string", newString);   // send string to spacebrew
                 }
             });
 
