@@ -20,30 +20,38 @@ var saveImageInCanvas = function (canvas){
                 // console.log(att, tags[att]);
                 html+='<li id="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
             }
-        	$("#output").html(html);
+        	 $("#output").html(html);
 
-	        var make_fortune = function(){
-	        	foo = Math.round(tags[0].value);
-				$("#output").prepend("<li class='fortune'></li>");		
+	         var make_fortune = function(){
+	        	var fortune = "";
+            foo = Math.round(tags[0].value);
+				    $("#output").prepend("<li class='fortune'></li>");		
 
-				if(foo < 25){
-					$('li.fortune').text('Now that you are '+ foo +' old, everything will now come your way.');
-				} else if(foo > 25 && foo < 30)	{
-					$('li.fortune').text('I can see you will live long. You\'re still '+ foo +'.');
-				} else if(foo >= 30 && foo < 40){
-					$('li.fortune').text('You are on your 30s Bro.' + foo );
-				} else if(foo >= 40){
-					$('li.fortune').text('You are '+ foo +'now is the time to try something new.');
-				} else {
-					$('li.fortune').text('NO DATA BRO. But you are ' + foo + 'years old');
-				}
-	        	
-	        	$("slide2").css('zIndex', 90);
-	        };
+    			if(foo < 25){
+    				fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
+    			} else if(foo > 25 && foo < 30)	{
+    				fortune = 'I can see you will live long. You\'re still '+ foo +'.';
+    			} else if(foo >= 30 && foo < 40){
+    				fortune = 'You are on your 30s Bro.' + foo ;
+    			} else if(foo >= 40){
+    				fortune = 'You are '+ foo +'now is the time to try something new.';
+  				} else {
+  					fortune = 'NO DATA BRO. But you are ' + foo + 'years old';
+    			}    
 
+          $('li.fortune').text(fortune);
+          sb.send("fortune", "string", fortune);
+          
+          $("slide2").css('zIndex', 90);
+          
+          
+
+          }; //make fortune end
 	        make_fortune();
 
-	        $("#output").prepend("<li class='username'>"+ user_name +"</li>")
+	       $("#output").prepend("<li class='username'>"+ user_name +"</li>");
+        sb.send("state", "string", "START IPAD");
+
     	}
 	});	
 },
@@ -52,7 +60,7 @@ renderCanvas = function (webcam, canvas){
 	var ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, webcam.width, webcam.height);
 	ctx.drawImage(webcam, 0, 0, webcam.width, webcam.height);
-    if(ctracker)ctracker.draw(canvas);
+  if(ctracker)ctracker.draw(canvas);
 },
 
 
@@ -74,7 +82,7 @@ initWebcam = function (sourceInfo){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    trackingFace(canvasApp);
+	    // trackingFace(canvasApp);
 	  }
 	);
 },
@@ -118,9 +126,7 @@ var positionLoop = function() {
 var sb,
 	app_name = "psychic";
 	
-	$(window).on("load", setup);
-
-var setup = function(){
+var spacebrew = function(){
     app_name = app_name;
 
     sb = new Spacebrew.Client();  // create spacebrew client object
@@ -128,11 +134,11 @@ var setup = function(){
     sb.name(app_name);
     sb.description("This app sends text from an HTML form."); // set the app description
 
-	sb.addPublish("state", "string", "");    // create the publication feed
+  	sb.addPublish("state", "string", "");    // create the publication feed
+    sb.addPublish("fortune", "string", "");
+
     sb.addSubscribe("name", "string");      // create the subscription feed
     
-    // sb.addSubscribe("text", "string");      // create the subscription feed
-    // sb.addSubscribe("text2", "string");      // create the subscription feed
 
     sb.onStringMessage = onStringMessage;     
     sb.connect();  
@@ -142,9 +148,8 @@ var onStringMessage = function( name, value ){
     console.log("[onBooleanMessage] boolean message received ", value);
     if(name === "name"){
     	user_name = value;
-    	console.log('name sent: ', value);
+    	console.log('name received: ', value);
     }
-    // $("#name").text("Hi " + value); // display the sent message in the browser 
    	state1();        
 };
 //SPACEBREW ENDS
