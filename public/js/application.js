@@ -92,6 +92,13 @@ gotSources = function(sourceInfos) {
 
 var positionLoop = function() {
   requestAnimationFrame(positionLoop);
+  // setInterval(function(){
+ 	// var positions = ctracker.getCurrentPosition();
+ 	// if(positions){
+ 	// 	console.log(positions[0][0].toFixed(2));
+ 	// } 	  
+  // }, 200);
+
   // var positions = ctracker.getCurrentPosition();
   // do something with the positions ...
   // print the positions
