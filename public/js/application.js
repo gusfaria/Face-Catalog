@@ -1,3 +1,10 @@
+// GET THE SLIDES ON THE RIGHT ORDER iPad
+// STYLE THE USER INTERFACE
+// MAKE LINKEDIN WORK
+// try facebook?
+// MAKE THE FORTUNE GENERATOR
+// MAKE THE IMAGE 
+
 var canvasApp, webcamApp; 
 var ctracker;
 var videoSelect = document.querySelector("select#videoSource");
@@ -26,13 +33,13 @@ var saveImageInCanvas = function (canvas){
 	        	var fortune = "";
             foo = Math.round(tags[0].value);
 				    $("#output").prepend("<li class='fortune'></li>");		
-
+          
     			if(foo < 25){
     				fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
     			} else if(foo > 25 && foo < 30)	{
     				fortune = 'I can see you will live long. You\'re still '+ foo +'.';
     			} else if(foo >= 30 && foo < 40){
-    				fortune = 'You are on your 30s Bro.' + foo ;
+    				fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
     			} else if(foo >= 40){
     				fortune = 'You are '+ foo +'now is the time to try something new.';
   				} else {
@@ -43,15 +50,12 @@ var saveImageInCanvas = function (canvas){
           sb.send("fortune", "string", fortune);
           
           $("slide2").css('zIndex', 90);
-          
-          
 
           }; //make fortune end
 	        make_fortune();
 
 	       $("#output").prepend("<li class='username'>"+ user_name +"</li>");
         sb.send("state", "string", "START IPAD");
-
     	}
 	});	
 },
@@ -65,7 +69,7 @@ renderCanvas = function (webcam, canvas){
 
 
 trackingFace = function(canvas){
-	ctracker = new clm.tracker({stopOnConvergence : true});
+	ctracker = new clm.tracker({stopOnConvergence : false});
 	ctracker.init(pModel);
 	// ctracker.start(webcam, [0, 0, canvas.width, canvas.height]);
 	ctracker.start(webcam);
@@ -82,7 +86,7 @@ initWebcam = function (sourceInfo){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    // trackingFace(canvasApp);
+	    trackingFace(canvasApp);
 	  }
 	);
 },

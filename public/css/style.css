@@ -24,7 +24,8 @@ div#container{
 }
 
 #slide1{
-    height: 100%;
+    width: 100%;
+    height: 1200px;
     background: black;
     z-index: 100;
     opacity: 1;
@@ -32,11 +33,15 @@ div#container{
 
 #slide2{
     width: 100%;
-    height: 800px;
-    background: red;
+    height: 1200px;
+    background: black;
     opacity: 0;
     z-index: 90;
     transition: ALL 3s;
+}
+
+#slide2 img#character{
+    -webkit-filter: brightness(200);
 }
 
 div#psychic_gif{

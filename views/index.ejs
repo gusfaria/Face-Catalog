@@ -35,7 +35,7 @@
                 <div id="psychic_gif"></div>
             </section>
             <section id="slide2" class="slide">
-
+                <img id="character" src="/public/img/character.jpg">
             </section>
         </div>
 
@@ -55,16 +55,16 @@
 
 			var webcam = document.getElementById('webcam');
 			var canvas = document.getElementById('canvas');
-
+            var character = document.getElementById('character');
             // spacebar and sending name from user app triggers that!
             var state1 = function(){
-                    
                 //slide2 
                 setTimeout(function(){
                     $('#slide2').css({
                         "zIndex" : 101,
-                        "opacity" : 1
+                        "opacity" : 1,
                     });
+
                     state2();
                 },2000);
             };
