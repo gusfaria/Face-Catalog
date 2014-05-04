@@ -8,10 +8,11 @@ body{
 }
 
 div#container{
-    background: black; 
     width: 100%;
     height: 100%;
     position: absolute;
+    overflow: hidden;
+    background: black; 
     top:0;
     margin: 0 auto;
     text-align: center;
@@ -19,30 +20,27 @@ div#container{
 
 .slide{
     width: 100%;
-    height: 768px;
+    height: 1200px;
     position: absolute;
 }
 
 #slide1{
-    width: 100%;
-    height: 1200px;
-    background: black;
+    /*width: 100%;
+    height: 1200px;*/
+    /*background: lime;*/
     z-index: 100;
     opacity: 1;
 }
 
 #slide2{
-    width: 100%;
-    height: 1200px;
-    background: black;
+    /*width: 100%;
+    height: 1200px;*/
+/*    background: red; */  
     opacity: 0;
     z-index: 90;
     transition: ALL 3s;
 }
 
-#slide2 img#character{
-    -webkit-filter: brightness(200);
-}
 
 div#psychic_gif{
     margin-top: 200px;
@@ -54,27 +52,13 @@ div#psychic_gif{
     margin: 0 auto;
 }
 
+/*//DEBUG*/
 div#debug{
     position: absolute;
     top: 0;
     display: none;
     z-index: 1000;
 }
-
-a#button{
-    text-align: center;
-    width: 500px;
-    height: 30px;
-    background: lightblue;
-    position: relative;
-    margin-top: -100px;
-}
-
-/* input#user_name{
-    width:640px;
-    height: 20px;
-    margin-bottom: 10px;
-}*/
 
 ul li{
     background: white;
@@ -111,46 +95,18 @@ p#fortune_msg{
 }
 
 
-#input{
-	margin: 250px 0;
-	width: 100%;
-	height: 100px;
-	text-align: center; 
+/*slide2*/
+#slide2{
+
 }
 
-.form{
-	margin:  0 auto;
-	background: transparent;
-	border: none;
-	font-size: 18px;
-	font-weight: lighter;
-	color: #eee;
-	font-family:'Helvetica', sans-serif;
+#video_welcome{
+    -webkit-transform: rotate(-90deg);
 }
 
-input{
-	width: 500px;
-	height: 40px;
-}
-
-input:focus{
-	outline: none;
-	background: transparent;
-}
-
-input::-webkit-input-placeholder {
-	color: #eee;
-	font-weight: lighter;
-	border-bottom: 1px solid #2c3e50;
-	font-size: 18px;
-	font-family: 'Helvetica', sans-serif;
-}
-
-input:active::-webkit-input-placeholder ,
-input:focus::-webkit-input-placeholder {
-	color: #2c3e50;
-	font-weight: lighter;
-	font-size: 18px;
-	border-bottom: 1px solid #2c3e50;
-	font-family: 'Helvetica', sans-serif;
+#slide2 div#white_curtain{
+    position: absolute;
+    width: 100%;
+    height: 1680px;
+    background: red;
 }

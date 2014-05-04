@@ -30,68 +30,27 @@
         <script src="/public/js/application.js"></script>
     </head>
     <body>
+        
         <div id="container">
             <section id="slide1" class="slide">
                 <div id="psychic_gif"></div>
             </section>
-            <section id="slide2" class="slide" style = "background: ghostwhite;">
-<!--                 <img id="character" src="/public/img/character.jpg">
- -->            </section>
+            <section id="slide2" class="slide">
+                <video id="video_welcome" src="/public/res/video/welcome.mp4">
+                <div id="white_curtain"></div>
+            </section>
         </div>
+
 
         <div id='debug'>
             <canvas id="canvas" width="640" height="480"></canvas>
 <!--             <video id="webcam" width="640" height="480"></video> -->
-            <video id="webcam" width="640" height="480" style="display:none" ></video>
-            
+            <video id="webcam" width="640" height="480" style="display:none" loop></video> 
             <audio id="audio_welcome" src="/public/res/welcome.wav" type="audio/wav"></audio>
             <ul id="output">
 <!--                 //data is going here!  -->
             </ul>
         </div>
-        <script>
-            //SPACEBREW
-            $(window).on("load", spacebrew);
-
-			var webcam = document.getElementById('webcam');
-			var canvas = document.getElementById('canvas');
-            var character = document.getElementById('character');
-            // spacebar and sending name from user app triggers that!
-            var state1 = function(){
-                //slide2 
-                setTimeout(function(){
-                    $('#slide2').css({
-                        "zIndex" : 101,
-                        "opacity" : 1,
-                    });
-
-                    state2();
-                },2000);
-            };
-
-            var state2 = function(){ // PSYCHIC APPEARS...
-                var welcome_audio = document.getElementById('audio_welcome');
-                welcome_audio.play();
-                saveImageInCanvas(canvas);    
-            };
-
-            $(document).keydown(function(e){
-                if (e.keyCode === 68){ //PRESS D
-                    $("#debug").toggle();
-                } 
-                if(e.keyCode === 32){ // PRESS SPACEBAR // this is activate when the installation detects the user
-                    sb.send("state", "string", "START IPAD");
-                    state1(); //selfie
-                }
-                if(e.keyCode === 81 ){ // PRESS Q //STARTS USER APPLICATION!
-                    var newString = "START IPAD";
-                    sb.send("state", "string", newString);   // send string to spacebrew
-                }
-            });
-
-		    $(function(){
-		    	initApp(webcam, canvas);
-		    });
-    	</script>
+        <script type="text/javascript" src="/public/js/main.js"></script>
     </body>
 </html>
