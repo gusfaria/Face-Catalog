@@ -1,16 +1,21 @@
 // GET THE SLIDES ON THE RIGHT ORDER iPad
 // STYLE THE USER INTERFACE
 // MAKE LINKEDIN WORK
-// try facebook?
 // MAKE THE FORTUNE GENERATOR
-// MAKE THE IMAGE 
+// MAKE THE IMAGE
+// EXHIBITION PROOF = if the pictures is not detected... dont crash! 
 
-var canvasApp, webcamApp; 
-var ctracker;
-var videoSelect = document.querySelector("select#videoSource");
+var canvasApp,
+    webcamApp,
+    ctracker,
+    videoSelect,
+    sourceVideo,
+    user_name,
+    fortune;
+
+videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-var sourceVideo;
-var user_name = "";
+user_name = "";
 
 var saveImageInCanvas = function (canvas){
 	var img = canvas.toDataURL();
@@ -64,16 +69,19 @@ renderCanvas = function (webcam, canvas){
 	var ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, webcam.width, webcam.height);
 	ctx.drawImage(webcam, 0, 0, webcam.width, webcam.height);
-  if(ctracker)ctracker.draw(canvas);
+  if(ctracker) ctracker.draw(canvas);
 },
-
 
 trackingFace = function(canvas){
 	ctracker = new clm.tracker({stopOnConvergence : false});
 	ctracker.init(pModel);
 	// ctracker.start(webcam, [0, 0, canvas.width, canvas.height]);
 	ctracker.start(webcam);
-	positionLoop();
+	
+},
+
+start_facePos = function(){
+  positionLoop();
 },
 
 applicationLoop = function(){
@@ -86,7 +94,7 @@ initWebcam = function (sourceInfo){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    trackingFace(canvasApp);
+	    // trackingFace(canvasApp);
 	  }
 	);
 },
@@ -104,12 +112,12 @@ gotSources = function(sourceInfos) {
 
 var positionLoop = function() {
   requestAnimationFrame(positionLoop);
-  // setInterval(function(){
- 	// var positions = ctracker.getCurrentPosition();
- 	// if(positions){
- 	// 	console.log(positions[0][0].toFixed(2));
- 	// } 	  
-  // }, 200);
+  setInterval(function(){
+ 	var positions = ctracker.getCurrentPosition();
+ 	if(positions){
+ 		console.log(positions[0][0].toFixed(2));
+ 	} 	  
+  }, 1000);
 
   // var positions = ctracker.getCurrentPosition();
   // do something with the positions ...

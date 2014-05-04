@@ -79,7 +79,7 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
   var getInfo = function(){
     setTimeout(function() {
       request.post(param2, function(_error, _response, _body){
-            if (!_error && _response.statusCode == 200) {
+            if (!_error && _response.statusCode === 200) {
               var json = parser.toJson(_body, {object:true});
               console.log(json.BetafaceImageInfoResponse.int_response);
               if(json.BetafaceImageInfoResponse.int_response === 1){
@@ -90,6 +90,8 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
                 if(json.BetafaceImageInfoResponse.faces && json.BetafaceImageInfoResponse.faces.FaceInfo 
                   && json.BetafaceImageInfoResponse.faces.FaceInfo.tags){
                   betaface = json.BetafaceImageInfoResponse.faces.FaceInfo;
+                } else {
+                  console.log('betaface didnt detect a face');
                 }
                 database.insert({"uuid":_uuid, "imagePath":imagePath, betaface:betaface}, function(result){
                   res.end(JSON.stringify(json)); 
@@ -97,6 +99,7 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
               }
               
             }else{
+              console.log("error to obtain the information")
               res.end("error to obtain the information");
             }
         });

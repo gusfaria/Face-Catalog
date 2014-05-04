@@ -673,6 +673,7 @@ var clm = {
 		 *	(based on svm of face according to current model)
 		 */
 		this.getScore = function() {
+			console.log(meanscore);
 			return meanscore;
 		}
 
@@ -875,7 +876,7 @@ var clm = {
 			return jacobian;
 		}
 		
-		// calculate positions from parameters
+		calculate positions from parameters
 		var calculatePositions = function(parameters, useTransforms) {
 			var x, y, a, b;
 			var numParameters = parameters.length;
@@ -895,7 +896,7 @@ var clm = {
 				}
 				positions[i] = [x,y];
 			}
-			
+			console.log('positions' positions);
 			return positions;
 		}
 		
@@ -1673,7 +1674,7 @@ var webglFilter = function() {
     canvas.setAttribute('width', (patchWidth-filterWidth+1)+"px");
     canvas.setAttribute('height', ((patchHeight-filterHeight+1)*numPatches)+"px");
     canvas.setAttribute('id', 'renderCanvas');
-    canvas.setAttribute('style', 'display:none;');
+    canvas.setAttribute('style', 'display:block;');
     document.body.appendChild(canvas);
     // TODO : isolate this library from webgl-util.js
     gl = setupWebGL(canvas, {premultipliedAlpha: false, preserveDrawingBuffer : true, antialias : false});
