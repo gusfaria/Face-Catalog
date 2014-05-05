@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Spacebrew String</title>
+
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" charset="utf-8" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+		<!-- <meta name="viewport" content="width=device-width" /> -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		
+	</head>
+
+	<body>
+
+		<div id="container">
+			<div id="slide0"><img src="img/start_button.jpg"></div>
+			<div id="slide1">
+				<section class=wrapper>
+					<img src="img/name.png" width="90%">
+<!-- 					<span><label>What is your first and last name?</label></span> -->
+					<input placeholder="First name Second name" class="input" id="name" style="font-size: 30px;"/>
+					<a class="button" id="button"></a>				
+				</section>
+			</div>
+			<div id="slide2">
+				<p>Place hand here:</p>
+				<div id="scaning_line"></div>
+				<img src="img/hand.png" width="90%;">
+			</div>
+			<div id="slide3">
+				<img src="img/processing.gif" width="90%;">
+			</div>
+			<div id="slide4">
+				<img src="img/thank_you.gif" width="90%;">
+			</div>
+		</div>
+
+		
+	
+		<script type="text/javascript" src="js/jq.js"></script>
+		<script type="text/javascript" src="js/sb-1.4.0.js"></script>
+		<script type="text/javascript" src="js/hammer.js"></script>
+
+		<script type="text/javascript">
+		  
+			$(window).on("load", setup);
+
+			var sb,
+				app_name = "user";
+
+			function setup (){
+				app_name = app_name;
+
+				sb = new Spacebrew.Client();  // create spacebrew client object
+
+				sb.name(app_name);
+				sb.description("This app sends text from an HTML form."); // set the app description
+
+				sb.addSubscribe("state", "string");
+				sb.addPublish("name", "string", "");
+				// sb.addPublish("text2", "string", "");
+				// sb.addSubscribe("text", "string");
+
+				sb.onStringMessage = onStringMessage;		
+				sb.onOpen = onOpen;
+
+				sb.connect();  
+
+				$("#button").on("mousedown", onMouseDown);
+			}
+
+			function onOpen() {
+				var message = "Connected as <strong>" + sb.name() + "</strong>. ";
+				if (sb.name() === app_name) {
+					message += "<br>You can customize this app's name in the query string by adding <strong>name=your_app_name</strong>."
+				}
+				$("#name").html( message );
+			};
+
+			function onMouseDown (evt){
+				var newString = $("#name").val();
+				console.log("name: ", $("#name").val());
+				sb.send("name", "string", newString);
+			};
+
+			function onStringMessage( name, value ){
+				console.log("name: ", name);
+				console.log("value: ", value);
+				if(name === "state"){
+					state_start();
+				}
+			};
+
+			//SLIDE0 (START PAGE) to SLIDE1 (INPUT PAGE)
+			var state_start = function(){
+				$('#slide1').css({
+					"marginLeft" : "0%" 
+				});
+				$('#slide0').css({
+					"opacity" : 0,
+					"marginLeft" : "-100%",
+					"zIndex" : 10 
+				});
+			};
+			
+			//SLIDE1 (INPUT PAGE) to SLIDE2 (SCAN PAGE)
+			var state_scan = function(){
+				$('#slide1').css({
+					"zIndex" : 10 ,				
+					"marginLeft" : "-100%" 
+				});
+				$("#slide2").css({
+					"marginLeft" : "0%"
+				});
+			};
+
+			//SLIDE2 (SCAN PAGE) to SLIDE3 (PROCESSING)
+			var processing_slide = function(){
+				$('#slide2').css({
+					"zIndex" : 10,
+					"opacity" : "0"
+				});
+				$("#slide3").css({
+					"marginTop" : "0px"
+				});
+				setInterval(function(){
+					// window.location.href=window.location.href;
+					final_slide();
+				},2000);
+			};
+
+			//SLIDE3 (PROCESSING) to SLIDE4 (THANK YOU)
+			var final_slide = function(){
+				$('#slide3').css({
+					"zIndex" : 10,
+					"marginLeft" : "0px"
+				});
+				$("#slide4").css({
+					"marginLeft" : "0%"
+				});
+				// RELOAD
+				setInterval(function(){
+					window.location.href=window.location.href;
+				},20000);
+			}; 
+	    </script>
+	<script type="text/javascript">
+		document.ontouchmove = function(event){
+		    event.preventDefault();
+		};
+		document.doubletap = function(event){
+			event.preventDefault();	
+		};
+
+		$(document).ready(function(){
+			$("#slide0 img").on("click", function(){
+				state_start();
+			});
+
+			$(".input").on("click", function(){
+				$(".button").css({
+					"opacity" : 1,
+					"marginRight" : 0
+				});
+			});
+
+			$(".button").on("click", function(){
+					state_scan();
+			});
+
+			// $("#slide2").on("click", function(){
+			// 	$("#scaning_line").css("top", "1200px");
+			// 	$("#slide2 p").text("Scanning...");
+			// });
+
+			var count = 0;
+			var scan = function(){
+				
+				if($('#scaning_line').css("top") === "1200px"){
+					$("#scaning_line").css("top", "-20px");	
+					count ++;
+					if(count === 2){
+						count = 0;
+						$("#scaning_line").css("top", "1190px")
+						$("#slide2 p").text("DONE!");
+						setInterval(function(){
+							processing_slide();
+						}, 1000);
+					}
+					console.log(count);
+				} 
+				if($('#scaning_line').css("top") === "-20px"){
+					$("#scaning_line").css("top", "1200px");	
+				} 
+				requestAnimationFrame(scan);
+			};
+			requestAnimationFrame(scan);
+		});
+		
+		// Hammer.js
+		var element = document.getElementById('slide2');
+		var hammertime = Hammer(element).on("touch", function(event){
+			if(event.gesture.touches.length >= 5){
+				scan();
+				// $("#scaning_line").css("top", "1200px");
+				$("#slide2 p").text("Scanning...");
+			}
+			// alert(event.gesture.touches.length);
+		});
+	</script>
+	</body>
+</html>
