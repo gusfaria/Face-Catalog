@@ -8,6 +8,15 @@
         <script  src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script src="/public/js/utils.js"></script>
 		
+        <!-- //////////////////// LINKEDIN API ////////////////-->
+        <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+        api_key: 75wjs71yv91l72
+        authentication true
+        scope: r_network r_basicprofile r_fullprofile r_emailaddress r_contactinfo
+        onLoad: onLinkedInLoad
+        authorize: true
+        </script>
+
         <!-- clmtrackr js -->
         <script src="/public/js/utils.js"></script>
         <script src="/public/js/clmtrackr_js/ext_js/numeric-1.2.6.min.js"></script>
@@ -26,8 +35,7 @@
         <script src="/public/js/clmtrackr_js/ext_js/Stats.js"></script>
         <!-- clmtrackr js -->
 
-        <script type="text/javascript" src="public/js/spacebrew.js"></script> //spacebrew
-        <script src="/public/js/application.js"></script>
+        
     </head>
     <body>
         
@@ -43,6 +51,14 @@
 
 
         <div id='debug'>
+            <!-- //Linkedin --> 
+            <script type="IN/Login"></script>
+            <form name="searchform" onsubmit="return false;">
+              First Name:&nbsp;<input type="text" name="firstName"><br/>
+              Last Name:&nbsp;<input type="text" name="lastName"><br/>
+              <input type="button" name="search1" value="Search LinkedIn!" onclick="linkedin_app.searchClick()">
+            </form>
+
             <canvas id="canvas" width="640" height="480"></canvas>
 <!--             <video id="webcam" width="640" height="480"></video> -->
             <video id="webcam" width="640" height="480" style="display:none" loop></video> 
@@ -51,6 +67,10 @@
 <!--                 //data is going here!  -->
             </ul>
         </div>
+
+        <script src="/public/js/application.js"></script>
+        <script type="text/javascript" src="/public/js/linkedin.js"></script>
+        <script type="text/javascript" src="public/js/spacebrew.js"></script>
         <script type="text/javascript" src="/public/js/main.js"></script>
     </body>
 </html>

@@ -9,13 +9,18 @@ var canvasApp,
     webcamApp,
     ctracker,
     videoSelect,
-    sourceVideo,
-    user_name,
+    sourceVideo;
+
+var user_firstName,
+    user_lastName,
+    user_age,
+    user_gender,
+    user_profession,
+    user_picture,
     fortune;
 
 videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-user_name = "";
 
 var saveImageInCanvas = function (canvas){
 	var img = canvas.toDataURL();
@@ -59,7 +64,6 @@ var saveImageInCanvas = function (canvas){
           }; //make fortune end
 	        make_fortune();
 
-	       $("#output").prepend("<li class='username'>"+ user_name +"</li>");
         sb.send("state", "string", "START IPAD");
     	}
 	});	
@@ -77,7 +81,6 @@ trackingFace = function(canvas){
 	ctracker.init(pModel);
 	// ctracker.start(webcam, [0, 0, canvas.width, canvas.height]);
 	ctracker.start(webcam);
-	
 },
 
 start_facePos = function(){
@@ -136,22 +139,19 @@ var positionLoop = function() {
 
 //SPACEBREW STARTS
 var sb,
-	app_name = "psychic";
+	  app_name = "psychic";
 	
 var spacebrew = function(){
     app_name = app_name;
-
-    sb = new Spacebrew.Client();  // create spacebrew client object
-
+    sb = new Spacebrew.Client();
     sb.name(app_name);
-    sb.description("This app sends text from an HTML form."); // set the app description
+    sb.description("This app sends text from an HTML form.");
 
-  	sb.addPublish("state", "string", "");    // create the publication feed
+  	sb.addPublish("state", "string", "");
     sb.addPublish("fortune", "string", "");
 
-    sb.addSubscribe("name", "string");      // create the subscription feed
+    sb.addSubscribe("name", "string");
     
-
     sb.onStringMessage = onStringMessage;     
     sb.connect();  
 };
@@ -159,8 +159,13 @@ var spacebrew = function(){
 var onStringMessage = function( name, value ){
     console.log("[onBooleanMessage] boolean message received ", value);
     if(name === "name"){
-    	user_name = value;
-    	console.log('name received: ', value);
+    	var tmp_name = value;
+      var arr_name = tmp_name.split(" ");
+      user_firstName = arr_name[0];
+      user_lastName = arr_name[1];
+      console.log('name :: ', user_firstName + " " + user_lastName);
+      $("#output").prepend("<li class='username' style='font-weight: bold;'>"+ user_firstName + " " + user_lastName +"</li>");
+      linkedin_app.searchClick(user_firstName, user_lastName);
     }
    	state1();        
 };

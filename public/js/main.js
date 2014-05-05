@@ -2,9 +2,9 @@
 //SPACEBREW
 $(window).on("load", spacebrew);
 
-var webcam = document.getElementById('webcam');
-var canvas = document.getElementById('canvas');
-var character = document.getElementById('character');
+var webcam = document.getElementById('webcam'),
+    canvas = document.getElementById('canvas');
+
 // spacebar and sending name from user app triggers that!
 var state1 = function(){
     //slide2 
@@ -21,7 +21,7 @@ var state2 = function(){ // PSYCHIC APPEARS...
     var video_tag = $('#video_welcome');  
     video_tag.get(0).play();
     // welcome_audio.play();
-    // saveImageInCanvas(canvas);    
+    saveImageInCanvas(canvas);    
     $('#video_welcome').bind("ended", function() {
         console.log('ended');
         video_tag.attr('src', '/public/res/video/sample.mp4');

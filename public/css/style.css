@@ -58,6 +58,7 @@ div#debug{
     top: 0;
     display: none;
     z-index: 1000;
+    background: white;
 }
 
 ul li{
