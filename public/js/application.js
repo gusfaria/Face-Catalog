@@ -64,7 +64,7 @@ var saveImageInCanvas = function (canvas){
           }; //make fortune end
 	        make_fortune();
 
-        sb.send("state", "string", "START IPAD");
+          sb.send("state", "string", "START IPAD");
     	}
 	});	
 },
@@ -158,7 +158,10 @@ var spacebrew = function(){
 
 var onStringMessage = function( name, value ){
     console.log("[onBooleanMessage] boolean message received ", value);
+    
+    //if the value received is from the subscriber name....
     if(name === "name"){
+      state3();
     	var tmp_name = value;
       var arr_name = tmp_name.split(" ");
       user_firstName = arr_name[0];
@@ -167,7 +170,10 @@ var onStringMessage = function( name, value ){
       $("#output").prepend("<li class='username' style='font-weight: bold;'>"+ user_firstName + " " + user_lastName +"</li>");
       linkedin_app.searchClick(user_firstName, user_lastName);
     }
-   	state1();        
+    //else if the value received is from the subscriber state....
+    else if(name === "state"){
+      state1();
+    }        
 };
 //SPACEBREW ENDS
 

@@ -33,7 +33,6 @@ var linkedin_app = (function(){
         user_picture = members[0].pictureUrl;
         console.log('picture url', user_picture);  
       }
-      
     } else {
       // DO SOMETHING 
     }
