@@ -1,9 +1,7 @@
-// GET THE SLIDES ON THE RIGHT ORDER iPad
-// STYLE THE USER INTERFACE
-// MAKE LINKEDIN WORK
-// MAKE THE FORTUNE GENERATOR
-// MAKE THE IMAGE
+// MAKE THE FORTUNE GENERATOR + generic fortune
 // EXHIBITION PROOF = if the pictures is not detected... dont crash! 
+// ajax error / allow camera 
+
 
 var canvasApp,
     webcamApp,
@@ -59,12 +57,13 @@ var saveImageInCanvas = function (canvas){
           $('li.fortune').text(fortune);
           sb.send("fortune", "string", fortune);
           
-          $("slide2").css('zIndex', 90);
+          state4(); // 
 
           }; //make fortune end
-	        make_fortune();
+	        
+          make_fortune();
 
-          sb.send("state", "string", "START IPAD");
+          // sb.send("state", "string", "START IPAD");
     	}
 	});	
 },
@@ -151,7 +150,9 @@ var spacebrew = function(){
     sb.addPublish("fortune", "string", "");
 
     sb.addSubscribe("name", "string");
-    
+    sb.addSubscribe("state", "string");
+  
+
     sb.onStringMessage = onStringMessage;     
     sb.connect();  
 };
@@ -161,7 +162,7 @@ var onStringMessage = function( name, value ){
     
     //if the value received is from the subscriber name....
     if(name === "name"){
-      state3();
+      state3(); 
     	var tmp_name = value;
       var arr_name = tmp_name.split(" ");
       user_firstName = arr_name[0];
@@ -172,7 +173,9 @@ var onStringMessage = function( name, value ){
     }
     //else if the value received is from the subscriber state....
     else if(name === "state"){
-      state1();
+      if(value === "START"){ //user to psychic, start app
+        state1();
+      }
     }        
 };
 //SPACEBREW ENDS

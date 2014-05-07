@@ -3,30 +3,37 @@
 $(window).on("load", spacebrew);
 
 var webcam = document.getElementById('webcam'),
-    canvas = document.getElementById('canvas');
+    canvas = document.getElementById('canvas'),
+    video_tag = $('#video_welcome');
 
 // spacebar and sending name from user app triggers that!
 var state1 = function(){
-    //slide2 
-    setTimeout(function(){
-        $('#slide2').css({
-            "zIndex" : 101,
-            "opacity" : 1,
+        $('#slide1').css({
+            "zIndex" : 10,
+            "opacity" : 0,
         });
-        state2();
-    },2000);
-};
 
-var video_tag = $('#video_welcome');  
-var state2 = function(){ // PSYCHIC APPEARS...
+        $('div#curtain').css({"display":"block"});
+        $('div#curtain').delay(2000).fadeOut(1000);
+        
+        welcome();
+};
+  
+var welcome = function(){ // PSYCHIC APPEARS...
     video_tag.get(0).play();
-    // saveImageInCanvas(canvas);    
+    setTimeout(function(){
+        console.log("picture taken");
+    //  saveImageInCanvas(canvas);    
+    }, 2000);
+
+    //when first video ends... loop this until user inputs the name
     $('#video_welcome').bind("ended", function() {
         console.log('ended');
         video_tag.attr('src', '/public/res/video/loop_01.mp4');
         video_tag.get(0).play();        
     });
 };
+
 var state3 = function(){
     video_tag.attr('src', '/public/res/video/hand.mp4');
     video_tag.get(0).play();        
@@ -35,6 +42,7 @@ var state3 = function(){
         video_tag.get(0).play();        
     });
 };
+
 var state4 = function() {
     video_tag.attr('src', '/public/res/video/fade_out.mp4');
     video_tag.get(0).play();        

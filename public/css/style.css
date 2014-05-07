@@ -3,34 +3,32 @@
     padding: 0;
 }
 
-body{
-    background: black; 
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+    background: black;
 }
 
 div#container{
-    width: 1400px;
-    height: 900px;
+    position: relative;
+    min-height: 100%;
+    background: black;
     overflow: hidden;
-    background: black; 
-    top:0;
-    margin: 0 auto;
-    text-align: center;
 }
 
 .slide{
     width: 100%;
-    height: 900px;
+    height: 100%;
     position: absolute;
     background: #000;
-    background: lime;
 }
 
+
 #slide1{
-    /*width: 100%;
-    height: 1200px;*/
-    /*background: lime;*/
     z-index: 100;
     opacity: 1;
+    text-align: center;
 }
 
 
@@ -46,22 +44,26 @@ div#container{
 }
 
 #slide2{
-    /*width: 100%;
-    height: 1200px;*/
-/*    background: red; */  
-    margin: 0 auto; 
+    z-index: 80;
     opacity: 1;
-    z-index: 90;
+    overflow: hidden;
     transition: ALL 3s;
 }
 
 #slide2 video{
-    background: white;
-    height: auto;
-    width: 1400px;
-    margin-left: -390px;
+    height: 1440px;
+    width: 200%;
     display: block;
     -webkit-transform: rotate(-90deg);
+}
+
+div#curtain{
+    z-index: 90;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
 }
 
 
@@ -76,20 +78,6 @@ div#debug{
 
 ul li{
     background: white;
-}
-
-div#fortune{
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background: gray;
-    z-index: 105; 
-    display: none;
-    transition: ALL 3s;
 }
 
 h1#name{
