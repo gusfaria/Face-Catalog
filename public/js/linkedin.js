@@ -27,14 +27,18 @@ var linkedin_app = (function(){
     if(members.length <= 10){
       if(members[0].positions != 0){
         user_profession = members[0].positions.values[0].title;
+        person['profession'] = user_profession;
         console.log('Profession: ', user_profession);  
+      } else {
+        person['profession'] = null;
       }
       if (members[0].pictureUrl != undefined){
         user_picture = members[0].pictureUrl;
+        person['picture'] = user_picture;
         console.log('picture url', user_picture);  
       }
     } else {
-      // DO SOMETHING 
+      person['picture'] = null; 
     }
 
     // for (i in members) {
@@ -50,7 +54,7 @@ var linkedin_app = (function(){
     // searchHTML = searchHTML + "</ul>";
     
     // document.getElementById("searchresults").innerHTML = searchHTML;
-
+    return person;
   };
 
   return {

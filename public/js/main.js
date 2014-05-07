@@ -1,5 +1,3 @@
-
-//SPACEBREW
 $(window).on("load", spacebrew);
 
 var webcam = document.getElementById('webcam'),
@@ -23,7 +21,7 @@ var welcome = function(){ // PSYCHIC APPEARS...
     video_tag.get(0).play();
     setTimeout(function(){
         console.log("picture taken");
-    //  saveImageInCanvas(canvas);    
+     saveImageInCanvas(canvas);    
     }, 2000);
 
     //when first video ends... loop this until user inputs the name
@@ -49,19 +47,19 @@ var state4 = function() {
 };
 
 $(document).keydown(function(e){
-    if (e.keyCode === 68){ //PRESS D
+    if (e.keyCode === 68){ //PRESS D // for debug
         $("#debug").toggle();
     } 
     if(e.keyCode === 32){ // PRESS SPACEBAR // this is activated with the  
         sb.send("state", "string", "START IPAD");
         state1(); //selfie
     }
-    if(e.keyCode === 81 ){ // PRESS Q //STARTS USER APPLICATION!
-        var newString = "START IPAD";
-        sb.send("state", "string", newString);   // send string to spacebrew
-    }
 });
 
 $(function(){
 	initApp(webcam, canvas);
 });
+
+
+
+

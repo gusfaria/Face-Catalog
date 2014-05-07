@@ -2,6 +2,7 @@
 // EXHIBITION PROOF = if the pictures is not detected... dont crash! 
 // ajax error / allow camera 
 
+var person = {};
 
 var canvasApp,
     webcamApp,
@@ -32,7 +33,7 @@ var saveImageInCanvas = function (canvas){
             var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
             var html='';
             for(var att in tags){
-                // console.log(att, tags[att]);
+                console.log(att, tags[att]); // DEBUG ATTRIBUTES FACE ANALYSIS
                 html+='<li id="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
             }
         	 $("#output").html(html);
@@ -63,9 +64,33 @@ var saveImageInCanvas = function (canvas){
 	        
           make_fortune();
 
-          // sb.send("state", "string", "START IPAD");
-    	}
-	});	
+          // person['age'] = tag[0].value;
+          // person['age_confidence'] = tag[0].confidence;
+          // person['gender'] = tag[2].value;
+          // person['gender_confidence'] = tag[2].confidence;
+
+          person = {
+              "age" : tags[0].value,
+              "gender" : tags[2].value
+          };
+
+          return person;
+    	}, error: function(request, error){ 
+          // console.log('response: ', request);
+          // console.log('error: ', error);
+
+
+          // person = {
+          //     "age" : null,
+          //     "gender" : null
+          // };        
+          
+          // return false;
+      }
+	});
+  
+  return person;
+
 },
 
 renderCanvas = function (webcam, canvas){
