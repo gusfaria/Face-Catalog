@@ -52,7 +52,7 @@ div#container{
 
 #slide2 video{
     height: 1440px;
-    width: 200%;
+    width: 100%;
     display: block;
     -webkit-transform: rotate(-90deg);
 }

@@ -4,6 +4,9 @@
 
 var person = {};
 
+var hasLinkedin = false,
+    hasBetaface = false;
+
 var canvasApp,
     webcamApp,
     ctracker,
@@ -31,6 +34,10 @@ var saveImageInCanvas = function (canvas){
     	dataType: 'json',
     	success: function(response) {
             var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
+            
+            hasBetaface = true;
+            //maybe sent state to ipad? 
+            
             var html='';
             for(var att in tags){
                 console.log(att, tags[att]); // DEBUG ATTRIBUTES FACE ANALYSIS

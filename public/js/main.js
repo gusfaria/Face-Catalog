@@ -15,13 +15,12 @@ var state1 = function(){
         $('div#curtain').delay(2000).fadeOut(1000);
         
         welcome();
-};
-  
-var welcome = function(){ // PSYCHIC APPEARS...
+},
+    welcome = function(){ // PSYCHIC APPEARS...
     video_tag.get(0).play();
     setTimeout(function(){
         console.log("picture taken");
-     saveImageInCanvas(canvas);    
+        saveImageInCanvas(canvas);    
     }, 2000);
 
     //when first video ends... loop this until user inputs the name

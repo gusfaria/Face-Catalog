@@ -1,56 +1,52 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Spacebrew String</title>
+		<title>the Psychic: user interface</title>
 
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" charset="utf-8" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
 		<!-- <meta name="viewport" content="width=device-width" /> -->
 		<meta name="apple-mobile-web-app-capable" content="yes">
-
-		
 	</head>
 
 	<body>
-
 		<div id="container">
-			<div id="slide0"><img src="img/start_button.jpg"></div>
-			<div id="slide1">
-				<section class=wrapper>
-					<img src="img/name.png" width="90%">
-<!-- 					<span><label>What is your first and last name?</label></span> -->
-					<input placeholder="First name Second name" class="input" id="name" style="font-size: 30px;"/>
-					<a class="button" id="button"></a>				
-				</section>
+			<div id="slide0" class="slide">
+				<img id="start_button" src="img/start_button.jpg">
 			</div>
-			<div id="slide2">
-				<p>Place hand here:</p>
-				<div id="scaning_line"></div>
-				<img src="img/hand.png" width="90%;">
+			<div id="slide1" class="slide">
+				<img src="img/name.png" width="90%">
+				<input id="name" class="input" placeholder="First and second name" style="font-size: 30px;"/>
+				<a class="button" id="send_name"></a>				
 			</div>
-			<div id="slide3">
+			<div id="slide2" class="slide">
+				<p>Place your hand here:</p>
+				<img src="img/hand.png" id="hand">
+				<div id="scan_box">				
+					<div id="scanning_line"></div> 
+				</div>
+			</div>
+			<div id="slide3" class="slide">
 				<img src="img/processing.gif" width="90%;">
 			</div>
-			<div id="slide4">
+			<div id="slide4" class="slide">
 				<img src="img/thank_you.gif" width="90%;">
 			</div>
-		</div>
+		</div> 
 
-		
-	
 		<script type="text/javascript" src="js/jq.js"></script>
 		<script type="text/javascript" src="js/sb-1.4.0.js"></script>
 		<script type="text/javascript" src="js/hammer.js"></script>
 
 		<script type="text/javascript">
 		  
-			$(window).on("load", setup);
+			$(window).on("load", spacebrew);
 
 			var sb,
 				app_name = "user";
 
-			function setup (){
+			function spacebrew(){
 				app_name = app_name;
 
 				sb = new Spacebrew.Client();  // create spacebrew client object
@@ -59,156 +55,171 @@
 				sb.description("This app sends text from an HTML form."); // set the app description
 
 				sb.addSubscribe("state", "string");
+				sb.addPublish("state", "string", "");
+
 				sb.addPublish("name", "string", "");
-				// sb.addPublish("text2", "string", "");
-				// sb.addSubscribe("text", "string");
 
 				sb.onStringMessage = onStringMessage;		
 				sb.onOpen = onOpen;
 
 				sb.connect();  
 
-				$("#button").on("mousedown", onMouseDown);
+				// $("#send_name").on("click", function(){
+				// 	var newString = $("#name").val();
+				// 	console.log("name: ", $("#name").val());
+				// 	sb.send("name", "string", newString);
+				// });
 			}
 
 			function onOpen() {
-				var message = "Connected as <strong>" + sb.name() + "</strong>. ";
-				if (sb.name() === app_name) {
-					message += "<br>You can customize this app's name in the query string by adding <strong>name=your_app_name</strong>."
-				}
-				$("#name").html( message );
-			};
-
-			function onMouseDown (evt){
-				var newString = $("#name").val();
-				console.log("name: ", $("#name").val());
-				sb.send("name", "string", newString);
+				var message = "Connected as " + sb.name() + ".";
+				console.log(message);
 			};
 
 			function onStringMessage( name, value ){
 				console.log("name: ", name);
 				console.log("value: ", value);
 				if(name === "state"){
-					state_start();
+					// state_start();
 				}
 			};
-
-			//SLIDE0 (START PAGE) to SLIDE1 (INPUT PAGE)
-			var state_start = function(){
-				$('#slide1').css({
-					"marginLeft" : "0%" 
-				});
-				$('#slide0').css({
-					"opacity" : 0,
-					"marginLeft" : "-100%",
-					"zIndex" : 10 
-				});
-			};
 			
-			//SLIDE1 (INPUT PAGE) to SLIDE2 (SCAN PAGE)
-			var state_scan = function(){
-				$('#slide1').css({
-					"zIndex" : 10 ,				
-					"marginLeft" : "-100%" 
-				});
-				$("#slide2").css({
-					"marginLeft" : "0%"
-				});
-			};
+			// //SLIDE1 (INPUT PAGE) to SLIDE2 (SCAN PAGE)
+			// // var state_scan = function(){
+			// // 	$('#slide1').css({
+			// // 		"zIndex" : 10 ,				
+			// // 		"marginLeft" : "-100%" 
+			// // 	});
+			// // 	$("#slide2").css({
+			// // 		"marginLeft" : "0%"
+			// // 	});
+			// // };
 
-			//SLIDE2 (SCAN PAGE) to SLIDE3 (PROCESSING)
-			var processing_slide = function(){
-				$('#slide2').css({
-					"zIndex" : 10,
-					"opacity" : "0"
-				});
-				$("#slide3").css({
-					"marginTop" : "0px"
-				});
-				setInterval(function(){
-					// window.location.href=window.location.href;
-					final_slide();
-				},2000);
-			};
+			// //SLIDE2 (SCAN PAGE) to SLIDE3 (PROCESSING)
+			// // var processing_slide = function(){
+			// // 	$('#slide2').css({
+			// // 		"zIndex" : 10,
+			// // 		"opacity" : "0"
+			// // 	});
+			// // 	$("#slide3").css({
+			// // 		"marginTop" : "0px"
+			// // 	});
+			// // 	setInterval(function(){
+			// // 		// window.location.href=window.location.href;
+			// // 		final_slide(); 
+			// // 	},2000);
+			// // };
 
-			//SLIDE3 (PROCESSING) to SLIDE4 (THANK YOU)
-			var final_slide = function(){
-				$('#slide3').css({
-					"zIndex" : 10,
-					"marginLeft" : "0px"
-				});
-				$("#slide4").css({
-					"marginLeft" : "0%"
-				});
-				// RELOAD
-				setInterval(function(){
-					window.location.href=window.location.href;
-				},20000);
-			}; 
-	    </script>
+			// //SLIDE3 (PROCESSING) to SLIDE4 (THANK YOU)
+			// // var final_slide = function(){
+			// // 	$('#slide3').css({
+			// // 		"zIndex" : 10,
+			// // 		"marginLeft" : "0px"
+			// // 	});
+			// // 	$("#slide4").css({
+			// // 		"marginLeft" : "0%"
+			// // 	});
+			// // 	// RELOAD
+			// // 	setInterval(function(){
+			// // 		window.location.href=window.location.href;
+			// // 	},20000);
+			// // }; 
+
+	   </script>
 	<script type="text/javascript">
+
+//PREVENT DIFFERENT TOUCHES ON IPAD
 		document.ontouchmove = function(event){
 		    event.preventDefault();
 		};
 		document.doubletap = function(event){
 			event.preventDefault();	
 		};
+//PREVENT DIFFERENT TOUCHES ON IPAD
 
 		$(document).ready(function(){
-			$("#slide0 img").on("click", function(){
-				state_start();
+			//SLIDE 1 to SLIDE2 :: hit start
+			$("#start_button").on("click", function(){
+				sb.send("state", "string", "START");
+				$('#slide0').css({
+					"top" : "-100%",
+					"zIndex" : 10,
+					"opacity" : 0 
+				});
+				setTimeout(function(){
+					$('#slide1').css({
+						"opacity" : 1 
+					});
+				},700); //7000
 			});
 
+			//SLIDE1 to SLIDE2 :: hit the arrow to send name 
+			var send_name = function(){
+				var newString = $("#name").val();
+				console.log("name: ", $("#name").val());
+				sb.send("name", "string", newString);
+				
+				$("#slide2").css({"left" : "0"});
+				$("#slide1").animate({"left" : "100%"},3000);
+			}; 
+			$("#send_name").on("click", function(){  send_name(); });
+			document.onkeyup=function(e) {
+			    if(e.which === 13) send_name();
+			};
+
+			//SLIDE2 :: HAND SCAN
+			// Hammer.js
+			var ipad_height = 1180;
+			var element = document.getElementById('slide2');
+			var hammertime = Hammer(element).on("touch", function(event){
+				var counter = 0;
+				if(event.gesture.touches.length >= 4){
+					$("#slide2 p").text("Scanning...");
+					$("#scanning_line").css("top", ipad_height+"px");
+					var scanning2 = function(){
+						 if($('#scanning_line').css("top") === ipad_height+"px"){
+						 	$("#scanning_line").css("top", "0px");
+						 	counter ++;
+						 } else if ($('#scanning_line').css("top") === "0px"){
+						 	$("#scanning_line").css("top", ipad_height+"px");
+						 	counter ++;
+						 } else if(counter === 3){
+						 	$("#slide2 p").text("DONE");
+						 	$("#scanning_line").css("top", ipad_height -5+"px");
+						 	processing_fortune();
+						 }
+					 	requestAnimationFrame(scanning2);
+					 }
+					requestAnimationFrame(scanning2);
+				}
+				// alert(event.gesture.touches.length);
+			});
+
+			//SLIDE2 to SLIDE3 :: processing fortune.
+			var processing_fortune = function() {
+				$('#slide2').css({ "top" : "-100%" });
+				$('#slide3').css({ "top" : "0" });
+			};
+
+			//SLIDE3 to SLIDE4 :: final slide
+			var thankyou = function(){
+				setTimeout(function(){
+					$('#slide4').css({ "left" : "0" });
+					$('#slide3').css({ "opacity" : "0" });
+					$('#slide4').animate({ "opacity" : "1" }, 3000);
+				});
+			};
+
+
+			// arrow on the input 
 			$(".input").on("click", function(){
 				$(".button").css({
 					"opacity" : 1,
 					"marginRight" : 0
 				});
 			});
-
-			$(".button").on("click", function(){
-					state_scan();
-			});
-
-			// $("#slide2").on("click", function(){
-			// 	$("#scaning_line").css("top", "1200px");
-			// 	$("#slide2 p").text("Scanning...");
-			// });
-
-			var count = 0;
-			var scan = function(){
-				
-				if($('#scaning_line').css("top") === "1200px"){
-					$("#scaning_line").css("top", "-20px");	
-					count ++;
-					if(count === 2){
-						count = 0;
-						$("#scaning_line").css("top", "1190px")
-						$("#slide2 p").text("DONE!");
-						setInterval(function(){
-							processing_slide();
-						}, 1000);
-					}
-					console.log(count);
-				} 
-				if($('#scaning_line').css("top") === "-20px"){
-					$("#scaning_line").css("top", "1200px");	
-				} 
-				requestAnimationFrame(scan);
-			};
-			requestAnimationFrame(scan);
 		});
-		
-		// Hammer.js
-		var element = document.getElementById('slide2');
-		var hammertime = Hammer(element).on("touch", function(event){
-			if(event.gesture.touches.length >= 5){
-				scan();
-				// $("#scaning_line").css("top", "1200px");
-				$("#slide2 p").text("Scanning...");
-			}
-			// alert(event.gesture.touches.length);
-		});
+
 	</script>
 	</body>
 </html>
