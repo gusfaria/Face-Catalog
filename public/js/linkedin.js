@@ -56,7 +56,7 @@ var linkedin_app = (function(){
     // document.getElementById("searchresults").innerHTML = searchHTML;
     return person;
   };
-
+  hasLinkedin = true;
   return {
    "searchClick" : searchClick,
    "setSearchResults" : setSearchResults 

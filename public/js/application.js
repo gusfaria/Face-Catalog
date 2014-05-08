@@ -1,8 +1,9 @@
 // MAKE THE FORTUNE GENERATOR + generic fortune
-// EXHIBITION PROOF = if the pictures is not detected... dont crash! 
-// ajax error / allow camera 
+// allow camera 
 
 var person = {};
+
+var data_available = [];
 
 var hasLinkedin = false,
     hasBetaface = false;
@@ -84,8 +85,7 @@ var saveImageInCanvas = function (canvas){
           return person;
     	}, error: function(request, error){ 
           // console.log('response: ', request);
-          // console.log('error: ', error);
-
+          console.log('error: ', error);
 
           // person = {
           //     "age" : null,

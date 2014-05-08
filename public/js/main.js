@@ -15,8 +15,8 @@ var state1 = function(){
         $('div#curtain').delay(2000).fadeOut(1000);
         
         welcome();
-},
-    welcome = function(){ // PSYCHIC APPEARS...
+};
+var welcome = function(){ // PSYCHIC APPEARS...
     video_tag.get(0).play();
     setTimeout(function(){
         console.log("picture taken");
