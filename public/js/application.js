@@ -5,10 +5,12 @@ var person = {},
     categoriesArr = [];
 
 var user_firstName,
-    user_lastName;
+    user_lastName,
+    fortune_msg;
 
 var hasLinkedin,
-    hasBetaface;
+    hasBetaface,
+    hasFortune;
 
 var canvasApp,
     webcamApp,
@@ -39,19 +41,17 @@ var saveImageInCanvas = function (canvas){
               else if(tags[2].value === "female") sex = "women";
 
               person = {
-                  "age" : tags[0].value,
-                  "age_confidence" : tags[0].confidence,
-                  "gender" : tags[2].value,
-                  "gender_confidence" : tags[2].confidence,
-                  "sex" :  sex
+                "age" : tags[0].value,
+                "age_confidence" : tags[0].confidence,
+                "gender" : tags[2].value,
+                "gender_confidence" : tags[2].confidence,
+                "sex" :  sex
               };
 
               hasBetaface = true;
               console.log('hasBetaface: ', hasBetaface); 
 
-              if(hasBetaface === true && hasLinkedin === true){
-                fortune_generator();            
-              }
+              checkData();
 
               return person;
 
@@ -59,48 +59,9 @@ var saveImageInCanvas = function (canvas){
                 saveImageInCanvas(canvas);
                 console.log('oh no.');
             }
-            
-            
-          //   var html='';
-          //   for(var att in tags){
-          //       // console.log(att, tags[att]); // DEBUG ATTRIBUTES FACE ANALYSIS
-          //       html+='<li id="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
-          //   }
-        	 // $("#output").html(html);
 
-	        // var make_fortune = function(){ 
-         //    //generate fortune here
-         //    var fortune = "";
-         //    foo = Math.round(tags[0].value);
-         //    $("#output").prepend("<li class='fortune'></li>");    
-          
-         //    if(foo < 25){
-         //      fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
-         //    } else if(foo > 25 && foo < 30) {
-         //      fortune = 'I can see you will live long. You\'re still '+ foo +'.';
-         //    } else if(foo >= 30 && foo < 40){
-         //      fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
-         //    } else if(foo >= 40){
-         //      fortune = 'You are '+ foo +'now is the time to try something new.';
-         //    } else {
-         //      fortune = 'NO DATA BRO. But you are ' + foo + 'years old';
-         //    }  
-
-         //    $('li.fortune').text(fortune);
-         //    sb.send("fortune", "string", fortune);
-         //    state4(); 
-         //  };
-	        
-         //  make_fortune();
-
-          // person['age'] = tag[0].value;
-          // person['age_confidence'] = tag[0].confidence;
-          // person['gender'] = tag[2].value;
-          // person['gender_confidence'] = tag[2].confidence;
-          
     	}, error: function(request, error){ 
-          console.log(request, error);
-          // console.log('error: ', error);
+          console.log('ajax error: ', request, error);
       }
 	});
   
@@ -182,6 +143,8 @@ var onStringMessage = function( name, value ){
     else if(name === "state"){
       if(value === "START"){ //user to psychic, start app
         state1();
+      } else if( value === 'processing'){
+        state5();
       }
     }        
 };
@@ -191,6 +154,7 @@ var onStringMessage = function( name, value ){
 var initApp = function(webcam, canvas){
 	hasLinkedin = false;
   hasBetaface = false;
+  hasFortune = false;
   
   canvasApp = canvas;
 	webcamApp = webcam;

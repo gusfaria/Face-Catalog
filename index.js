@@ -8,6 +8,7 @@ var request = require('request');
 var parser = require('xml2json');
 var database = require(__dirname +"/database");
 
+
 console.log('db', database);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

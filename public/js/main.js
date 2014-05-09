@@ -43,6 +43,23 @@ var state3 = function(){
 var state4 = function() {
     video_tag.attr('src', '/public/res/video/fade_out.mp4');
     video_tag.get(0).play();        
+    setTimeout(function(){
+        location.reload(); //reload the page!!!
+    }, 10000); 
+};
+
+var state5 = function(){
+    $('#audio_process').get(0).play(); // play audio: processing
+    if(hasFortune === true){
+      state4(); // makes the psychic disappear
+      // sb.send("fortune", "string", fortune_msg); // print the fortune = I have to add the result of the fortune generator here!!
+      // setTimeout(function(){  
+        sb.send("state", "string", "printing"); // change the screen for the ipad from processing to thank you get your fortune.
+        
+      // }, 1000);
+    } else {
+        fortune_generator();
+    }
 };
 
 $(document).keydown(function(e){
@@ -58,6 +75,14 @@ $(document).keydown(function(e){
 $(function(){
 	initApp(webcam, canvas);
 });
+
+var checkData = function(){
+    if(hasLinkedin === true && hasBetaface === true){
+        fortune_generator();
+    } else {
+        console.log('data not complete!');
+    }   
+};
 
 
 var fortune_generator = function(){
@@ -156,11 +181,11 @@ var fortune_generator = function(){
             msg = randArr[tmpRandomNumber];
     /*  console.log('getFortune random number: ', tmpRandomNumber);    
         console.log('getFortune msg: ', randArr[tmpRandomNumber]);*/
-        state4();
-        $('#audio_process').get(0).play();
-        console.log(msg); 
-        $("#output").prepend("<li class='fortune' style='font-weight: bold; font-size:14px;'>"+ msg +"</li>");
 
+        console.log("fortune", msg); 
+        $("#output").prepend("<li class='fortune' style='font-weight: bold; font-size:14px;'>"+ msg +"</li>");
+        hasFortune = true;
+        msg = fortune_msg
         return msg;
     };
 
