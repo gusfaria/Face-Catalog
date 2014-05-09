@@ -1,26 +1,21 @@
 // MAKE THE FORTUNE GENERATOR + generic fortune
 // allow camera 
 
-var person = {};
+var person = {},
+    categoriesArr = [];
 
-var data_available = [];
+var user_firstName,
+    user_lastName;
 
-var hasLinkedin = false,
-    hasBetaface = false;
+var hasLinkedin,
+    hasBetaface;
 
 var canvasApp,
     webcamApp,
     ctracker,
     videoSelect,
     sourceVideo;
-
-var user_firstName,
-    user_lastName,
-    user_age,
-    user_gender,
-    user_profession,
-    user_picture,
-    fortune;
+    
 
 videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -36,63 +31,64 @@ var saveImageInCanvas = function (canvas){
     	success: function(response) {
             var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
             
-            hasBetaface = true;
-            //maybe sent state to ipad? 
-            
-            var html='';
-            for(var att in tags){
-                console.log(att, tags[att]); // DEBUG ATTRIBUTES FACE ANALYSIS
-                html+='<li id="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
-            }
-        	 $("#output").html(html);
+          //   var html='';
+          //   for(var att in tags){
+          //       // console.log(att, tags[att]); // DEBUG ATTRIBUTES FACE ANALYSIS
+          //       html+='<li id="'+ tags[att].name +'">' +tags[att].confidence + " - " + tags[att].name + ' - ' + tags[att].value + '</li>';
+          //   }
+        	 // $("#output").html(html);
 
-	         var make_fortune = function(){
-	        	var fortune = "";
-            foo = Math.round(tags[0].value);
-				    $("#output").prepend("<li class='fortune'></li>");		
+	        // var make_fortune = function(){ 
+         //    //generate fortune here
+         //    var fortune = "";
+         //    foo = Math.round(tags[0].value);
+         //    $("#output").prepend("<li class='fortune'></li>");    
           
-    			if(foo < 25){
-    				fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
-    			} else if(foo > 25 && foo < 30)	{
-    				fortune = 'I can see you will live long. You\'re still '+ foo +'.';
-    			} else if(foo >= 30 && foo < 40){
-    				fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
-    			} else if(foo >= 40){
-    				fortune = 'You are '+ foo +'now is the time to try something new.';
-  				} else {
-  					fortune = 'NO DATA BRO. But you are ' + foo + 'years old';
-    			}    
+         //    if(foo < 25){
+         //      fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
+         //    } else if(foo > 25 && foo < 30) {
+         //      fortune = 'I can see you will live long. You\'re still '+ foo +'.';
+         //    } else if(foo >= 30 && foo < 40){
+         //      fortune = 'Now that you are '+ foo +' old, everything will now come your way.';
+         //    } else if(foo >= 40){
+         //      fortune = 'You are '+ foo +'now is the time to try something new.';
+         //    } else {
+         //      fortune = 'NO DATA BRO. But you are ' + foo + 'years old';
+         //    }  
 
-          $('li.fortune').text(fortune);
-          sb.send("fortune", "string", fortune);
-          
-          state4(); // 
-
-          }; //make fortune end
+         //    $('li.fortune').text(fortune);
+         //    sb.send("fortune", "string", fortune);
+         //    state4(); 
+         //  };
 	        
-          make_fortune();
+         //  make_fortune();
 
           // person['age'] = tag[0].value;
           // person['age_confidence'] = tag[0].confidence;
           // person['gender'] = tag[2].value;
           // person['gender_confidence'] = tag[2].confidence;
+          var sex;
+          if(tags[2].value === "male") sex = "men";
+          else if(tags[2].value === "female") sex = "women";
 
           person = {
               "age" : tags[0].value,
-              "gender" : tags[2].value
+              "age_confidence" : tags[0].confidence,
+              "gender" : tags[2].value,
+              "gender_confidence" : tags[2].confidence,
+              "sex" :  sex
           };
+
+          hasBetaface = true;
+          console.log('hasBetaface: ', hasBetaface); 
+
+          if(hasBetaface === true && hasLinkedin === true){
+            fortune_generator();            
+          }
 
           return person;
     	}, error: function(request, error){ 
-          // console.log('response: ', request);
-          console.log('error: ', error);
-
-          // person = {
-          //     "age" : null,
-          //     "gender" : null
-          // };        
-          
-          // return false;
+          // console.log('error: ', error);
       }
 	});
   
@@ -104,14 +100,6 @@ renderCanvas = function (webcam, canvas){
 	var ctx = canvas.getContext('2d');
 	ctx.clearRect(0, 0, webcam.width, webcam.height);
 	ctx.drawImage(webcam, 0, 0, webcam.width, webcam.height);
-  if(ctracker) ctracker.draw(canvas);
-},
-
-trackingFace = function(canvas){
-	ctracker = new clm.tracker({stopOnConvergence : false});
-	ctracker.init(pModel);
-	// ctracker.start(webcam, [0, 0, canvas.width, canvas.height]);
-	ctracker.start(webcam);
 },
 
 start_facePos = function(){
@@ -128,7 +116,6 @@ initWebcam = function (sourceInfo){
 	  function(stream) {
 	    webcam.src = window.webkitURL.createObjectURL(stream);
 	    webcam.play();
-	    // trackingFace(canvasApp);
 	  }
 	);
 },
@@ -142,29 +129,6 @@ gotSources = function(sourceInfos) {
       return;
     }
   }
-};
-
-var positionLoop = function() {
-  requestAnimationFrame(positionLoop);
-  setInterval(function(){
- 	var positions = ctracker.getCurrentPosition();
- 	if(positions){
- 		console.log(positions[0][0].toFixed(2));
- 	} 	  
-  }, 1000);
-
-  // var positions = ctracker.getCurrentPosition();
-  // do something with the positions ...
-  // print the positions
-  // var positionString = "";
-  // if (positions) {
-  // console.log(positions[0][0].toFixed(2));
-  // $('#debug').html($('<div>', {class: 'spinner'}));
-  //   for (var p = 0;p < 10;p++) {
-  //     positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
-  //   }
-  //   document.getElementById('positions').innerHTML = positionString;
-  // }
 };
 
 
@@ -184,7 +148,6 @@ var spacebrew = function(){
     sb.addSubscribe("name", "string");
     sb.addSubscribe("state", "string");
   
-
     sb.onStringMessage = onStringMessage;     
     sb.connect();  
 };
@@ -214,7 +177,10 @@ var onStringMessage = function( name, value ){
 
 
 var initApp = function(webcam, canvas){
-	canvasApp = canvas;
+	hasLinkedin = false;
+  hasBetaface = false;
+  
+  canvasApp = canvas;
 	webcamApp = webcam;
 	if (typeof MediaStreamTrack === 'undefined'){
 	  alert('This browser does not support MediaStreamTrack.\n\nTry Chrome Canary.');
