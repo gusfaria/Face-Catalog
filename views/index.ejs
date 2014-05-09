@@ -9,6 +9,9 @@
 		
         <!-- //////////////////// LINKEDIN API ////////////////-->
         <script type="text/javascript" src="http://platform.linkedin.com/in.js">
+        function onLinkedInLoad() {
+            console.log('this just ran: onLinkedInLoad');
+        };
         api_key: 75wjs71yv91l72
         authentication true
         scope: r_network r_basicprofile r_fullprofile r_emailaddress r_contactinfo
@@ -43,6 +46,7 @@
             <canvas id="canvas" width="640" height="480"></canvas>
             <video id="webcam" width="640" height="480" style="display:none" loop></video> 
             <audio id="audio_welcome" src="/public/res/welcome.wav" type="audio/wav"></audio>
+            <audio id="audio_process" src="/public/res/audio/process.wav" type="audio/wav"></audio>
             <ul id="output">
                 <!-- //data is going here!  -->
             </ul>

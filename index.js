@@ -2,6 +2,7 @@ var express = require('express');
 var app  = express();
 var port = 8080;
 var fs = require('fs');
+var https = require('https');
 var uuid = require('node-uuid');
 var request = require('request');
 var parser = require('xml2json');
@@ -92,6 +93,7 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
                   betaface = json.BetafaceImageInfoResponse.faces.FaceInfo;
                 } else {
                   console.log('betaface didnt detect a face');
+                  // betaface = null;
                 }
                 database.insert({"uuid":_uuid, "imagePath":imagePath, betaface:betaface}, function(result){
                   res.end(JSON.stringify(json)); 

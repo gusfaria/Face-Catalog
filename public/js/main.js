@@ -155,7 +155,9 @@ var fortune_generator = function(){
             tmpRandomNumber = randomNumber(0, randArr.length-1),
             msg = randArr[tmpRandomNumber];
     /*  console.log('getFortune random number: ', tmpRandomNumber);    
-      console.log('getFortune msg: ', randArr[tmpRandomNumber]);*/
+        console.log('getFortune msg: ', randArr[tmpRandomNumber]);*/
+        state4();
+        $('#audio_process').get(0).play();
         console.log(msg); 
         $("#output").prepend("<li class='fortune' style='font-weight: bold; font-size:14px;'>"+ msg +"</li>");
 

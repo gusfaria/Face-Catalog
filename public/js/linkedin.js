@@ -14,12 +14,14 @@ var linkedin_app = (function(){
           "picture-url": "",
         })
         .result(function(result, metadata) {
+          metadata = metadata === undefined ? '' : metadata; 
           setSearchResults(result, metadata);
         });
   };
 
   function setSearchResults(result, metadata) {
-    var members = result.people.values;
+    //debugger;
+    var members = result.people.values || [];
     searchHTML = "Search Results (" + result.numResults + "):<ul>";
     // console.log('length', members.length);
     // console.log('Members', members);

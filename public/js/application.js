@@ -1,5 +1,5 @@
-// MAKE THE FORTUNE GENERATOR + generic fortune
 // allow camera 
+// fix ajax error
 
 var person = {},
     categoriesArr = [];
@@ -29,7 +29,37 @@ var saveImageInCanvas = function (canvas){
     	data: JSON.stringify({image: img}),		
     	dataType: 'json',
     	success: function(response) {
-            var tags = response.BetafaceImageInfoResponse.faces.FaceInfo.tags.TagInfo;
+            var faces = response.BetafaceImageInfoResponse.faces,
+                tags;
+            if(faces.hasOwnProperty('FaceInfo')) {
+              tags = faces.FaceInfo.tags.TagInfo;  
+              
+              var sex;
+              if(tags[2].value === "male") sex = "men";
+              else if(tags[2].value === "female") sex = "women";
+
+              person = {
+                  "age" : tags[0].value,
+                  "age_confidence" : tags[0].confidence,
+                  "gender" : tags[2].value,
+                  "gender_confidence" : tags[2].confidence,
+                  "sex" :  sex
+              };
+
+              hasBetaface = true;
+              console.log('hasBetaface: ', hasBetaface); 
+
+              if(hasBetaface === true && hasLinkedin === true){
+                fortune_generator();            
+              }
+
+              return person;
+
+            } else {
+                saveImageInCanvas(canvas);
+                console.log('oh no.');
+            }
+            
             
           //   var html='';
           //   for(var att in tags){
@@ -67,27 +97,9 @@ var saveImageInCanvas = function (canvas){
           // person['age_confidence'] = tag[0].confidence;
           // person['gender'] = tag[2].value;
           // person['gender_confidence'] = tag[2].confidence;
-          var sex;
-          if(tags[2].value === "male") sex = "men";
-          else if(tags[2].value === "female") sex = "women";
-
-          person = {
-              "age" : tags[0].value,
-              "age_confidence" : tags[0].confidence,
-              "gender" : tags[2].value,
-              "gender_confidence" : tags[2].confidence,
-              "sex" :  sex
-          };
-
-          hasBetaface = true;
-          console.log('hasBetaface: ', hasBetaface); 
-
-          if(hasBetaface === true && hasLinkedin === true){
-            fortune_generator();            
-          }
-
-          return person;
+          
     	}, error: function(request, error){ 
+          console.log(request, error);
           // console.log('error: ', error);
       }
 	});
