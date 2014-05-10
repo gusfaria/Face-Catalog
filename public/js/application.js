@@ -25,7 +25,7 @@ navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia
 var saveImageInCanvas = function (canvas){
 	var img = canvas.toDataURL();
 	$.ajax({
-    	url: 'http://localhost:8080/uploadImage',
+    	url: 'https://localhost:8080/uploadImage',
     	type: 'post',
     	contentType: 'application/json',
     	data: JSON.stringify({image: img}),		

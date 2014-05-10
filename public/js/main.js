@@ -41,11 +41,12 @@ var state3 = function(){
 };
 
 var state4 = function() {
+    console.log('state4');
     video_tag.attr('src', '/public/res/video/fade_out.mp4');
     video_tag.get(0).play();        
     setTimeout(function(){
-        location.reload(); //reload the page!!!
-    }, 10000); 
+        // location.reload(); //reload the page!!!
+    }, 9000); 
 };
 
 var state5 = function(){
@@ -54,11 +55,11 @@ var state5 = function(){
       state4(); // makes the psychic disappear
       // sb.send("fortune", "string", fortune_msg); // print the fortune = I have to add the result of the fortune generator here!!
       // setTimeout(function(){  
-        sb.send("state", "string", "printing"); // change the screen for the ipad from processing to thank you get your fortune.
+        setTimout(function(){
+           sb.send("state", "string", "printing"); // change the screen for the ipad from processing to thank you get your fortune. 
+       },2000);
         
       // }, 1000);
-    } else {
-        fortune_generator();
     }
 };
 

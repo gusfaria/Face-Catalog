@@ -1,12 +1,23 @@
-var express = require('express');
-var app  = express();
+// var express = require('express');
+var https = require('https');
+var http = require('http');
+// var app  = express();
 var port = 8080;
 var fs = require('fs');
-var https = require('https');
 var uuid = require('node-uuid');
 var request = require('request');
 var parser = require('xml2json');
 var database = require(__dirname +"/database");
+// var betaface;
+
+
+var privateKey  = fs.readFileSync('key.pem', 'utf8');
+var certificate = fs.readFileSync('key-cert.pem', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+var express = require('express');
+var app = express();
+
 
 
 console.log('db', database);
@@ -131,5 +142,11 @@ app.post("/uploadImage", function(req, res, next){
   	});
 });
 
-app.listen(port);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(8888);
+httpsServer.listen(port);
+
+// app.listen(port);
 console.log("Express server listening on port "+port);
