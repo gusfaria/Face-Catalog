@@ -21,9 +21,9 @@ var canvasApp,
 
 videoSelect = document.querySelector("select#videoSource");
 navigator.getUserMedia = navigator.getUserMedia ||  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
+var tentativas = 0;
 var saveImageInCanvas = function (canvas){
-	var img = canvas.toDataURL();
+  var img = canvas.toDataURL();
 	$.ajax({
     	url: 'https://localhost:8080/uploadImage',
     	type: 'post',
@@ -37,8 +37,9 @@ var saveImageInCanvas = function (canvas){
               tags = faces.FaceInfo.tags.TagInfo;  
               
               var sex;
-              if(tags[2].value === "male") sex = "men";
-              else if(tags[2].value === "female") sex = "women";
+              // if(tags[2].value === "male") sex = "men";
+              // else if(tags[2].value === "female") sex = "women";
+              sex = tags[2].value === "male" ? 'men' : 'women';
 
               person = {
                 "age" : tags[0].value,
@@ -57,7 +58,13 @@ var saveImageInCanvas = function (canvas){
 
             } else {
                 saveImageInCanvas(canvas);
-                console.log('oh no.');
+                tentativas ++;
+                console.log('oh no.', tentativas);
+                if(tentativas >= 5){
+                  hasBetaface = true;
+                  checkData();
+                  return false;
+                }
             }
 
     	}, error: function(request, error){ 
@@ -137,7 +144,10 @@ var onStringMessage = function( name, value ){
       user_lastName = arr_name[1];
       console.log('name :: ', user_firstName + " " + user_lastName);
       $("#output").prepend("<li class='username' style='font-weight: bold;'>"+ user_firstName + " " + user_lastName +"</li>");
-      linkedin_app.searchClick(user_firstName, user_lastName);
+      if(user_firstName != undefined){
+        linkedin_app.searchClick(user_firstName, user_lastName);  
+      }
+      
     }
     //else if the value received is from the subscriber state....
     else if(name === "state"){

@@ -105,7 +105,7 @@ function getBetafaceapi(_uuid, imagePath, imageBase64, res){
                   betaface = json.BetafaceImageInfoResponse.faces.FaceInfo;
                 } else {
                   console.log('betaface didnt detect a face');
-                  // betaface = null;
+                  betaface = null;
                 }
                 database.insert({"uuid":_uuid, "imagePath":imagePath, betaface:betaface}, function(result){
                   res.end(JSON.stringify(json)); 

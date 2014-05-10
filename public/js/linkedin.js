@@ -23,18 +23,20 @@ var linkedin_app = (function(){
     var members = result.people.values || [];
     searchHTML = "Search Results (" + result.numResults + "):<ul>";
     // console.log('length', members.length);
+    // console.log('member 0: ', members[0]);
     // console.log('Members', members);
-    if(members != []){
-      if(members[0].hasOwnProperty('positions') === true && members.length <= 10){
+    // debugger;
+    if(members != null || members != [] || members[0] !== undefined || members[0] !== null) {
+      if(members[0].positions !== undefined || members.length <= 10){
         var user_profession; 
-        if(members[0].positions != 0){
+        if(members[0].positions !== 0){
           user_profession = members[0].positions.values[0].title; 
           person['profession'] = user_profession;
           person['profession_confidence'] = 1 / members.length;  
           // console.log('user profession: ', user_profession);
         }
         var user_pictureUrl; 
-        if (members[0].pictureUrl != undefined){
+        if (members[0].pictureUrl !== undefined){
           user_picture = members[0].pictureUrl;
           person['picture'] = user_picture;
           // console.log('picture url', user_picture);  
@@ -43,17 +45,25 @@ var linkedin_app = (function(){
         hasLinkedin = true;
         console.log('hasLinkedin: ', hasLinkedin);
         checkData();
+        return person;
         // if(hasLinkedin === true && hasBetaface === true){
         //   fortune_generator();
         // }
       } else {
         hasLinkedin = true;
         checkData();
+        return person;
+        
       } 
     } else {
       hasLinkedin = true;
+      console.log('2');
       checkData();
+      console.log('else - if')
+      return person;
     }
+
+
 
     return person;
 

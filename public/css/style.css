@@ -38,7 +38,7 @@ div#container{
 }
 
 #slide1 p{
-    font-size: 20px;
+    font-size: 30px;
     color: #383b45;
     font-family: 'Avenir', sans-serif;
 }
@@ -53,6 +53,14 @@ div#container{
 #slide2 video{
     height: 1440px;
     width: 100%;
+    position: relative; 
+    right: 0; 
+    bottom: 0;
+    left: -300px;
+    min-width: 100%; 
+    /*min-height: 100%;*/
+    width: auto; 
+    height: auto;
     display: block;
     -webkit-transform: rotate(-90deg);
 }
