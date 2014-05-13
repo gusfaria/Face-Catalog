@@ -44,7 +44,13 @@ var state4 = function() {
     console.log('state4');
     video_tag.attr('src', '/public/res/video/fade_out.mp4');
     console.log('fade_out');
-    video_tag.get(0).play();        
+    video_tag.get(0).play();
+    $('#video_welcome').bind("ended", function() {
+        video_tag.attr('src', '/public/res/video/loop_03.mp4');
+        video_tag.get(0).play();        
+    });
+
+
     setTimeout(function(){
         location.reload(); //reload the page!!!
     }, 50000); 
