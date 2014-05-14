@@ -141,7 +141,11 @@ var fortune_generator = function(){
     ];
 
     var generic = [
-      "Life is beautiful!"
+      "Life is beautiful, enjoy it.",
+      "Good fortune awaits you at the end of the day.",
+      "You will be fortunate in the opportunities presented to you.",
+      "You are the guiding star of his existence.",
+      "A cheerful letter or message is on its way to you.",
     ];  
 
     //profession fortunes
@@ -155,7 +159,7 @@ var fortune_generator = function(){
     // POPULATING THE ARRAY WITH CATEGORIES
     if(person['age'] !== undefined){
       categoriesArr.push(age);
-      if(person['age_confidence'] > 0.01){
+      if(person['age_confidence'] > 0.5){
         categoriesArr.push(gender_age);
       }
       if(person['age'] < 35){
@@ -164,7 +168,8 @@ var fortune_generator = function(){
     }
     if(person['profession'] !== undefined){
        categoriesArr.push(profession); 
-        if(person['profession_confidence'] > 0.1){
+        if(person['profession_confidence'] > 0.3){
+            categoriesArr.push(profession);
             categoriesArr.push(profession); 
         }
     }
