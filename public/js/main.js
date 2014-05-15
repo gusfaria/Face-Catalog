@@ -53,7 +53,7 @@ var state4 = function() {
 
     setTimeout(function(){
         location.reload(); //reload the page!!!
-    }, 50000); 
+    }, 5000); 
 };
 
 var state5 = function(){
@@ -170,6 +170,7 @@ var fortune_generator = function(){
        categoriesArr.push(profession); 
         if(person['profession_confidence'] > 0.3){
             categoriesArr.push(profession);
+            categoriesArr.push(profession);
             categoriesArr.push(profession); 
         }
     }
@@ -206,7 +207,7 @@ var fortune_generator = function(){
         console.log("fortune", msg); 
         $("#output").prepend("<li class='fortune' style='font-weight: bold; font-size:14px;'>"+ msg +"</li>");
         hasFortune = true;
-        fortune_msg = msg;
+        fortune_msg = user_firstName +", "+ msg;
         return fortune_msg;
     };
 
