@@ -1,8 +1,11 @@
 
 #include "SoftwareSerial.h"
 #include "Adafruit_Thermal.h"
-#include "adalogo.h"
-#include "adaqrcode.h"
+#include "psychic_270.h"
+
+//#include "adalogo.h"
+//#include "adaqrcode.h"
+
 #include <avr/pgmspace.h>
 
 int printer_RX_Pin = 2;  // This is the green wire
@@ -37,15 +40,10 @@ void loop() {
       completeStr = tempStr;
       //then send string to thermal printer
       printer.println("");
-      printer.justify('C');
-      printer.setSize('L');
-      printer.println("****************");
-      printer.justify('C');
-      printer.setSize('L');
-      printer.println("THE PSYCHIC");
-      printer.justify('C');
-      printer.setSize('L');
-      printer.println("****************");
+      
+      printer.printBitmap(psychic_270_width, psychic_270_height, psychic_270_data);
+
+      printer.println("");
       printer.boldOn();
       printer.doubleHeightOn();
       printer.justify('M');
