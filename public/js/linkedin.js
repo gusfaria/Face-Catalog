@@ -7,7 +7,7 @@ var linkedin_app = (function(){
 // }
 
     IN.API.PeopleSearch()
-        .fields( "id", "firstName", "lastName", "positions", "pictureUrl")
+        .fields( "id", "firstName", "lastName", "positions", "pictureUrl", "headline")
         .params({
           "first-name": fName,
           "last-name": lName,
@@ -27,10 +27,10 @@ var linkedin_app = (function(){
     // console.log('Members', members);
     // debugger;
     if(members != null || members != [] || members[0] !== undefined || members[0] !== null) {
-      if(members[0].positions !== undefined || members.length <= 10){
+      if(members[0].headline !== undefined || members.length <= 10){
         var user_profession; 
         if(members[0].positions !== 0){
-          user_profession = members[0].positions.values[0].title; 
+          user_profession = members[0].headline; 
           person['profession'] = user_profession;
           person['profession_confidence'] = 1 / members.length;  
           // console.log('user profession: ', user_profession);

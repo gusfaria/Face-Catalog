@@ -35,7 +35,6 @@ var saveImageInCanvas = function (canvas){
                 tags;
             if(faces.hasOwnProperty('FaceInfo')) {
               tags = faces.FaceInfo.tags.TagInfo;  
-              
               var sex;
               // if(tags[2].value === "male") sex = "men";
               // else if(tags[2].value === "female") sex = "women";
@@ -46,7 +45,8 @@ var saveImageInCanvas = function (canvas){
                 "age_confidence" : tags[0].confidence,
                 "gender" : tags[2].value,
                 "gender_confidence" : tags[2].confidence,
-                "sex" :  sex
+                "sex" :  sex,
+                "beard" : tags[1].value
               };
 
               hasBetaface = true;

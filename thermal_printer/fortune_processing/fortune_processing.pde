@@ -34,7 +34,7 @@ void setup() {
   }
  
   myPort = new Serial(this, Serial.list()[(Serial.list().length-1)], 9600); 
-  myPort.bufferUntil('\n');
+  myPort.bufferUntil('*');
 }
 
 void draw() {
@@ -44,5 +44,5 @@ void draw() {
 
 void onStringMessage( String name, String value ){
   text(value, 150, 120);  
-  myPort.write(value + "\n"); 
+  myPort.write(value + "*"); 
 }

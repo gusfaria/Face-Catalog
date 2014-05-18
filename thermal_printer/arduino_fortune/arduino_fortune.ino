@@ -35,31 +35,44 @@ void setup(){
 void loop() {
   if (Serial.available() > 0) {
     char ch = Serial.read();
-    if (ch == '\n') {
+    if (ch == '*') {
 
       completeStr = tempStr;
+      
+//      completeStr = "This is..\n..a test..\n..testing";
       //then send string to thermal printer
       printer.println("");
-      
       printer.printBitmap(psychic_270_width, psychic_270_height, psychic_270_data);
-
+      
       printer.println("");
+      printer.setSize('S');
+      printer.justify('C');
+      printer.println("****************");
+      printer.println("");
+      
       printer.boldOn();
+      printer.doubleHeightOff();
       printer.doubleHeightOn();
       printer.justify('M');
       printer.println(completeStr);
       printer.boldOff();
       printer.doubleHeightOff();
-      printer.setSize('L');
+      printer.doubleHeightOff();
+
+      printer.setSize('S');
       printer.justify('C');
       printer.println("****************");
-      printer.println("");
+     
+      printer.setSize('S');
+      printer.justify('C');      
+      printer.println("www.gusfaria.com");
+      
       printer.println("");
       printer.setSize('M');
       printer.justify('C');
+      
+      
       tempStr = "";
-
-
     } 
     else {
 
